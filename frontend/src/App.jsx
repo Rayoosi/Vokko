@@ -65,6 +65,8 @@ function App() {
           return;
         }
 
+        /* ---------------- USER ---------------- */
+
         const userRes =
           await api.get(
             "/users/me",
@@ -84,20 +86,32 @@ function App() {
           userRes.data.points
         );
 
-        const missionRes =
-          await api.get(
-            "/missions/daily",
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`
+        /* ---------------- MISSION ---------------- */
+
+        try {
+
+          const missionRes =
+            await api.get(
+              "/missions/daily",
+              {
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`
+                }
               }
-            }
+            );
+
+          setMission(
+            missionRes.data
           );
 
-        setMission(
-          missionRes.data
-        );
+        } catch (err) {
+
+          console.log(
+            "Mission load failed"
+          );
+
+        }
 
       } catch (err) {
 
@@ -126,6 +140,8 @@ function App() {
 
     try {
 
+      /* ---------------- LOGIN ---------------- */
+
       const res =
         await api.post(
           "/auth/login",
@@ -142,6 +158,8 @@ function App() {
         "token",
         token
       );
+
+      /* ---------------- USER ---------------- */
 
       const userRes =
         await api.get(
@@ -162,20 +180,34 @@ function App() {
         userRes.data.points
       );
 
-      const missionRes =
-        await api.get(
-          "/missions/daily",
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
+      /* ---------------- MISSION ---------------- */
+
+      try {
+
+        const missionRes =
+          await api.get(
+            "/missions/daily",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
             }
-          }
+          );
+
+        setMission(
+          missionRes.data
         );
 
-      setMission(
-        missionRes.data
-      );
+      } catch (err) {
+
+        console.log(
+          "Mission load failed"
+        );
+
+      }
+
+      /* ---------------- SUCCESS ---------------- */
 
       toast.success(
         "Login successful 🚀"
@@ -188,9 +220,20 @@ function App() {
 
       console.log(err);
 
-      toast.error(
-        "Login failed"
-      );
+      if (err.response) {
+
+        toast.error(
+          err.response.data.error ||
+          "Login failed"
+        );
+
+      } else {
+
+        toast.error(
+          "Server error"
+        );
+
+      }
     }
   };
 
@@ -205,7 +248,7 @@ function App() {
         <div className="text-center">
 
           <h1 className="text-5xl font-bold">
-           Vokko 🚀
+            Vokko 🚀
           </h1>
 
           <p className="text-slate-400 mt-4 text-lg">
@@ -224,7 +267,7 @@ function App() {
 
       <Toaster position="top-right" />
 
-      {/* PUBLIC ROUTES */}
+      {/* ---------------- PUBLIC ---------------- */}
 
       {!user ? (
 
