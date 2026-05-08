@@ -1,0 +1,294 @@
+const router =
+  require("express").Router();
+
+const auth =
+  require("../middleware/auth");
+
+const db =
+  require("../config/db");
+
+/* ---------------- ADMIN CHECK ---------------- */
+
+router.use(auth);
+
+router.use((req, res, next) => {
+
+  if (req.user.role !== "admin") {
+
+    return res.status(403).json({
+      error: "Access denied"
+    });
+  }
+
+  next();
+});
+
+/* ---------------- DASHBOARD STATS ---------------- */
+
+router.get(
+  "/stats",
+  async (req, res) => {
+
+    try {
+
+      /* TOTAL USERS */
+
+      const users =
+        await db.query(
+          `
+          SELECT COUNT(*) AS total
+          FROM users
+          `
+        );
+
+      /* TOTAL PAYMENTS */
+
+      const payments =
+        await db.query(
+          `
+          SELECT COUNT(*) AS total
+          FROM payments
+          `
+        );
+
+      /* TOTAL REVENUE */
+
+      const revenue =
+        await db.query(
+          `
+          SELECT
+          COALESCE(SUM(amount),0)
+          AS total
+          FROM payments
+          `
+        );
+
+      /* LATEST PAYMENTS */
+
+      const latestPayments =
+        await db.query(
+          `
+          SELECT
+            payments.id,
+            payments.plan,
+            payments.amount,
+            payments.status,
+            users.username
+          FROM payments
+          JOIN users
+          ON users.id = payments.user_id
+          ORDER BY payments.id DESC
+          LIMIT 10
+          `
+        );
+
+      res.json({
+
+        totalUsers:
+          users.rows[0].total,
+
+        totalPayments:
+          payments.rows[0].total,
+
+        totalRevenue:
+          revenue.rows[0].total,
+
+        latestPayments:
+          latestPayments.rows
+
+      });
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+    }
+  }
+);
+
+/* ---------------- GET WITHDRAW REQUESTS ---------------- */
+
+router.get(
+  "/withdraws",
+  async (req, res) => {
+
+    try {
+
+      const withdraws =
+        await db.query(
+          `
+          SELECT
+            withdraw_requests.id,
+            withdraw_requests.user_id,
+            withdraw_requests.amount,
+            withdraw_requests.wallet_address,
+            withdraw_requests.status,
+            withdraw_requests.created_at,
+            users.username
+          FROM withdraw_requests
+          JOIN users
+          ON users.id = withdraw_requests.user_id
+          ORDER BY withdraw_requests.id DESC
+          `
+        );
+
+      res.json(
+        withdraws.rows
+      );
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+    }
+  }
+);
+
+/* ---------------- UPDATE WITHDRAW STATUS ---------------- */
+
+router.put(
+  "/withdraws/:id",
+  async (req, res) => {
+
+    const client =
+      await db.connect();
+
+    try {
+
+      await client.query("BEGIN");
+
+      const { id } =
+        req.params;
+
+      const { status } =
+        req.body;
+
+      if (
+        status !== "approved" &&
+        status !== "rejected"
+      ) {
+
+        await client.query("ROLLBACK");
+
+        return res.status(400).json({
+          error: "Invalid status"
+        });
+      }
+
+      /* ---------------- GET REQUEST ---------------- */
+
+      const requestResult =
+        await client.query(
+          `
+          SELECT *
+          FROM withdraw_requests
+          WHERE id=$1
+          FOR UPDATE
+          `,
+          [id]
+        );
+
+      const request =
+        requestResult.rows[0];
+
+      console.log(request);
+
+      if (!request) {
+
+        await client.query("ROLLBACK");
+
+        return res.status(404).json({
+          error: "Request not found"
+        });
+      }
+
+      /* ---------------- ONLY PENDING ---------------- */
+
+      if (
+        request.status !== "pending"
+      ) {
+
+        await client.query("ROLLBACK");
+
+        return res.status(400).json({
+          error:
+            "Request already processed"
+        });
+      }
+
+      /* ---------------- UPDATE STATUS ---------------- */
+
+      await client.query(
+        `
+        UPDATE withdraw_requests
+        SET status=$1
+        WHERE id=$2
+        `,
+        [
+          status,
+          id
+        ]
+      );
+
+      /* ---------------- REFUND POINTS ---------------- */
+
+      if (
+        status === "rejected"
+      ) {
+
+        const refundAmount =
+          Number(request.amount);
+
+        await client.query(
+          `
+          INSERT INTO points_transactions
+          (
+            user_id,
+            amount
+          )
+          VALUES($1, $2)
+          `,
+          [
+            request.user_id,
+            refundAmount
+          ]
+        );
+
+        console.log(
+          "✅ POINTS REFUNDED"
+        );
+      }
+
+      await client.query("COMMIT");
+
+      res.json({
+        message:
+          "Withdraw updated"
+      });
+
+    } catch (err) {
+
+      await client.query(
+        "ROLLBACK"
+      );
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    } finally {
+
+      client.release();
+    }
+  }
+);
+
+module.exports = router;
