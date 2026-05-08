@@ -1,5 +1,9 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "http://localhost:3000"
+const api = axios.create({
+
+  baseURL:
+    "https://vokko-production.up.railway.app"
 });
+
+export default api;
