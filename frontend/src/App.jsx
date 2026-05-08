@@ -220,20 +220,6 @@ function App() {
 
       console.log(err);
 
-      if (err.response) {
-
-        toast.error(
-          err.response.data.error ||
-          "Login failed"
-        );
-
-      } else {
-
-        toast.error(
-          "Server error"
-        );
-
-      }
     }
   };
 
