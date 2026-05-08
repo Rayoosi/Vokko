@@ -7,12 +7,25 @@ const app = express();
 
 /* ---------------- CORS ---------------- */
 
-app.use(cors({
-  origin: [
-    "https://vokko-tawny.vercel.app"
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "https://vokko-tawny.vercel.app"
+    ],
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+      "OPTIONS"
+    ],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization"
+    ],
+    credentials: true
+  })
+);
 
 /* ---------------- JSON ---------------- */
 
@@ -31,28 +44,35 @@ app.use("/missions", require("./routes/missions"));
 /* ---------------- HOME ---------------- */
 
 app.get("/", (req, res) => {
-  res.json({
+
+  res.status(200).json({
     ok: true,
-    message: "Vokko backend active 🚀"
+    message: "Vokko backend active 🚀",
+    time: new Date()
   });
+
 });
 
 /* ---------------- 404 ---------------- */
 
 app.use((req, res) => {
+
   res.status(404).json({
     error: "Route not found"
   });
+
 });
 
 /* ---------------- ERROR HANDLER ---------------- */
 
 app.use((err, req, res, next) => {
-  console.error(err);
+
+  console.error("❌ Server Error:", err);
 
   res.status(500).json({
     error: err.message || "Internal Server Error"
   });
+
 });
 
 /* ---------------- SERVER ---------------- */
@@ -60,5 +80,9 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🔥 Server running on port ${PORT}`);
+
+  console.log(
+    `🔥 Server running on port ${PORT}`
+  );
+
 });
