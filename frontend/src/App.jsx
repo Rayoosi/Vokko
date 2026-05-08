@@ -29,6 +29,7 @@ import VipPage from "./pages/VipPage";
 import WithdrawPage from "./pages/WithdrawPage";
 import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
 
@@ -140,8 +141,6 @@ function App() {
 
     try {
 
-      /* ---------------- LOGIN ---------------- */
-
       const res =
         await api.post(
           "/auth/login",
@@ -158,8 +157,6 @@ function App() {
         "token",
         token
       );
-
-      /* ---------------- USER ---------------- */
 
       const userRes =
         await api.get(
@@ -179,8 +176,6 @@ function App() {
       setPoints(
         userRes.data.points
       );
-
-      /* ---------------- MISSION ---------------- */
 
       try {
 
@@ -206,8 +201,6 @@ function App() {
         );
 
       }
-
-      /* ---------------- SUCCESS ---------------- */
 
       toast.success(
         "Login successful 🚀"
@@ -277,6 +270,11 @@ function App() {
           <Route
             path="/cancel"
             element={<CancelPage />}
+          />
+
+          <Route
+            path="/payment"
+            element={<PaymentPage />}
           />
 
         </Routes>
@@ -376,6 +374,11 @@ function App() {
               <Route
                 path="/vip"
                 element={<VipPage />}
+              />
+
+              <Route
+                path="/payment"
+                element={<PaymentPage />}
               />
 
               <Route

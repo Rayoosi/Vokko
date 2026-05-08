@@ -81,17 +81,6 @@ export default function VipPage() {
     }
   ];
 
-  /* ---------------- COPY WALLET ---------------- */
-
-  const copyWallet = () => {
-
-    navigator.clipboard.writeText(
-      "TCikcY8GnuqZKJEaD7yuc2VYBVJMRJ4vDW"
-    );
-
-    alert("Wallet copied ✅");
-  };
-
   return (
 
     <div className="min-h-screen bg-[#020b2d] text-white">
@@ -199,7 +188,10 @@ export default function VipPage() {
 
               <button
                 type="button"
-                onClick={copyWallet}
+                onClick={() => {
+                  window.location.href =
+                    "/payment";
+                }}
                 disabled={
                   user?.vip_level === plan.name
                 }
@@ -219,37 +211,6 @@ export default function VipPage() {
             </div>
 
           ))}
-
-        </div>
-
-        {/* ---------------- PAYMENT BOX ---------------- */}
-
-        <div className="bg-slate-800 border border-yellow-500 rounded-3xl p-8 mt-10">
-
-          <h2 className="text-4xl font-black text-yellow-400 mb-4">
-            Pay with USDT (TRC20)
-          </h2>
-
-          <p className="text-slate-300 text-lg">
-            Send your payment to this wallet address:
-          </p>
-
-          <div className="bg-slate-900 mt-6 p-5 rounded-2xl break-all text-green-400 font-black text-xl">
-
-            TCikcY8GnuqZKJEaD7yuc2VYBVJMRJ4vDW
-
-          </div>
-
-          <button
-            onClick={copyWallet}
-            className="mt-6 bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-2xl transition"
-          >
-            Copy Wallet 📋
-          </button>
-
-          <p className="text-slate-500 mt-6">
-            After payment contact admin with transaction screenshot.
-          </p>
 
         </div>
 
