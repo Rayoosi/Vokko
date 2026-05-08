@@ -81,48 +81,15 @@ export default function VipPage() {
     }
   ];
 
-  /* ---------------- BUY VIP ---------------- */
+  /* ---------------- COPY WALLET ---------------- */
 
-  const buyVip = async (plan) => {
+  const copyWallet = () => {
 
-    try {
+    navigator.clipboard.writeText(
+      "TCikcY8GnuqZKJEaD7yuc2VYBVJMRJ4vDW"
+    );
 
-      const token =
-        localStorage.getItem("token");
-
-      if (!token) {
-
-        alert("Please login first");
-
-        return;
-      }
-
-      const res =
-        await api.post(
-          "/billing/create-checkout",
-          {
-            plan
-          },
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
-            }
-          }
-        );
-
-      if (res.data.url) {
-
-        window.location.href =
-          res.data.url;
-      }
-
-    } catch (err) {
-
-      console.log(err);
-
-      alert("Payment error");
-    }
+    alert("Wallet copied ✅");
   };
 
   return (
@@ -235,9 +202,6 @@ export default function VipPage() {
                 disabled={
                   user?.vip_level === plan.name
                 }
-                onClick={() => {
-                  buyVip(plan.name);
-                }}
                 className={`w-full mt-8 font-bold py-4 rounded-2xl text-lg transition ${
                   user?.vip_level === plan.name
                     ? "bg-slate-700 cursor-not-allowed"
@@ -247,13 +211,44 @@ export default function VipPage() {
                 {
                   user?.vip_level === plan.name
                     ? "Current Plan"
-                    : "Upgrade 🚀"
+                    : "Manual Payment"
                 }
               </button>
 
             </div>
 
           ))}
+
+        </div>
+
+        {/* USDT PAYMENT */}
+
+        <div className="bg-slate-800 border border-yellow-500 rounded-3xl p-8 mt-10">
+
+          <h2 className="text-4xl font-black text-yellow-400 mb-4">
+            Pay with USDT (TRC20)
+          </h2>
+
+          <p className="text-slate-300 text-lg">
+            Send your payment to this wallet address:
+          </p>
+
+          <div className="bg-slate-900 mt-6 p-5 rounded-2xl break-all text-green-400 font-black text-xl">
+
+            TCikcY8GnuqZKJEaD7yuc2VYBVJMRJ4vDW
+
+          </div>
+
+          <button
+            onClick={copyWallet}
+            className="mt-6 bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-2xl transition"
+          >
+            Copy Wallet 📋
+          </button>
+
+          <p className="text-slate-500 mt-6">
+            After payment contact admin with transaction screenshot.
+          </p>
 
         </div>
 
