@@ -122,7 +122,7 @@ export default function LandingPage({
             <div>
 
               <h1 className="font-black text-2xl">
-                Rayoo
+                Vokko
               </h1>
 
               <p className="text-slate-400 text-sm">
@@ -171,7 +171,7 @@ export default function LandingPage({
           <div>
 
             <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-semibold mb-8">
-              Rayoo Rewards Platform 🚀
+              Vokko Rewards Platform 🚀
             </div>
 
             <h1 className="text-5xl md:text-7xl font-black leading-tight">
