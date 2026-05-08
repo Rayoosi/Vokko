@@ -4,7 +4,7 @@ import axios from "axios";
 export default function VipPage() {
 
   const api = axios.create({
-    baseURL: "vokko-production.up.railway.app"
+    baseURL: "https://vokko-production.up.railway.app"
   });
 
   const [user, setUser] =
