@@ -4,7 +4,7 @@ import axios from "axios";
 export default function VipPage() {
 
   const api = axios.create({
-    baseURL: "https://vokko-production.up.railway.app"
+    baseURL: "https://vokko-backend-production.up.railway.app"
   });
 
   const [user, setUser] =
@@ -20,33 +20,33 @@ export default function VipPage() {
     const loadUser =
       async () => {
 
-        try {
+      try {
 
-          const token =
-            localStorage.getItem("token");
+        const token =
+          localStorage.getItem("token");
 
-          const res =
-            await api.get(
-              "/users/me",
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${token}`
-                }
+        const res =
+          await api.get(
+            "/users/me",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
               }
-            );
-
-          setUser(res.data.user);
-
-          setPoints(
-            res.data.points
+            }
           );
 
-        } catch (err) {
+        setUser(res.data.user);
 
-          console.log(err);
-        }
-      };
+        setPoints(
+          res.data.points
+        );
+
+      } catch (err) {
+
+        console.log(err);
+      }
+    };
 
     loadUser();
 
@@ -98,7 +98,7 @@ export default function VipPage() {
 
       <main className="p-6">
 
-        {/* HEADER */}
+        {/* ---------------- HEADER ---------------- */}
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-6">
 
@@ -114,7 +114,7 @@ export default function VipPage() {
 
           </div>
 
-          {/* USER CARD */}
+          {/* ---------------- USER CARD ---------------- */}
 
           <div className="bg-slate-800 border border-slate-700 rounded-3xl px-6 py-5 min-w-[280px]">
 
@@ -154,7 +154,7 @@ export default function VipPage() {
 
         </div>
 
-        {/* VIP CARDS */}
+        {/* ---------------- VIP CARDS ---------------- */}
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
@@ -199,6 +199,7 @@ export default function VipPage() {
 
               <button
                 type="button"
+                onClick={copyWallet}
                 disabled={
                   user?.vip_level === plan.name
                 }
@@ -221,7 +222,7 @@ export default function VipPage() {
 
         </div>
 
-        {/* USDT PAYMENT */}
+        {/* ---------------- PAYMENT BOX ---------------- */}
 
         <div className="bg-slate-800 border border-yellow-500 rounded-3xl p-8 mt-10">
 
