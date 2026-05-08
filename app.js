@@ -5,20 +5,20 @@ const cors = require("cors");
 
 const app = express();
 
-/* ---------------- MIDDLEWARE ---------------- */
+/* ---------------- CORS ---------------- */
 
-app.use(
-  cors({
-    origin: [
-      "https://vokko-tawny.vercel.app"
-    ],
-    credentials: true
-  })
-);
+const corsOptions = {
+  origin: "https://vokko-tawny.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 /* ---------------- PREFLIGHT ---------------- */
 
-app.options("/*", cors());
+app.options("/*", cors(corsOptions));
 
 /* ---------------- JSON ---------------- */
 
@@ -34,11 +34,6 @@ app.use("/tasks", require("./routes/tasks"));
 app.use("/admin", require("./routes/admin"));
 app.use("/missions", require("./routes/missions"));
 
-/* ---------------- STRIPE DISABLED ---------------- */
-
-// app.use("/webhook", require("./routes/webhook"));
-// app.use("/billing", require("./routes/billing"));
-
 /* ---------------- HEALTH CHECK ---------------- */
 
 app.get("/", (req, res) => {
@@ -47,6 +42,7 @@ app.get("/", (req, res) => {
     status: "Vokko backend active 🚀",
     time: new Date()
   });
+
 });
 
 /* ---------------- SERVER ---------------- */
@@ -59,4 +55,5 @@ app.listen(PORT, () => {
   console.log(
     `🔥 Server running on port ${PORT}`
   );
+
 });
