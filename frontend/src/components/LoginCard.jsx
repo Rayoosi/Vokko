@@ -49,7 +49,7 @@ function LoginCard({
 
     try {
 
-      /* REGISTER */
+      /* ---------------- REGISTER ---------------- */
 
       if (isRegister) {
 
@@ -72,7 +72,7 @@ function LoginCard({
         return;
       }
 
-      /* LOGIN */
+      /* ---------------- LOGIN ---------------- */
 
       await login(
         username,
@@ -83,10 +83,6 @@ function LoginCard({
 
       console.log(err);
 
-      toast.error(
-        err.response?.data?.error ||
-        "Something went wrong"
-      );
     }
   };
 
