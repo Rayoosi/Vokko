@@ -1,0 +1,174 @@
+/* RESET */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  overflow: hidden;
+}
+
+/* APP LAYOUT */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 230px;
+  background: #020617;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar button {
+  padding: 12px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar button:hover {
+  background: #1e293b;
+}
+
+/* LOGOUT */
+.danger {
+  margin-top: auto;
+  background: #ef4444 !important;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  background: #020617;
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+/* LOGIN BOX */
+.login {
+  max-width: 320px;
+  margin: 120px auto;
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: #020617;
+  border: 1px solid #334155;
+  color: white;
+  border-radius: 10px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #38bdf8;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #0ea5e9;
+}
+
+/* PAGE SYSTEM */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* IMPORTANT */
+.hidden {
+  display: none;
+}
+
+/* GRID */
+.grid {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* CARDS */
+.card {
+  flex: 1;
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* GRADIENT CARD */
+.gradient {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+}
+
+/* SECTION */
+.section {
+  margin-top: 30px;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* TASKS / USERS LIST */
+#tasks .card,
+#users .card {
+  margin-bottom: 10px;
+}
+
+/* CANVAS CHART */
+canvas {
+  background: #020617;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* SMALL TEXT */
+small {
+  color: #94a3b8;
+}
