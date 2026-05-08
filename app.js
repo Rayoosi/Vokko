@@ -10,11 +10,41 @@ const app = express();
 const corsOptions = {
   origin: "https://vokko-tawny.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization"
+  ],
   credentials: true
 };
 
 app.use(cors(corsOptions));
+
+/* ---------------- MANUAL HEADERS ---------------- */
+
+app.use((req, res, next) => {
+
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://vokko-tawny.vercel.app"
+  );
+
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+
+  if (req.method === "OPTIONS") {
+
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 
 /* ---------------- JSON ---------------- */
 
