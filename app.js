@@ -16,10 +16,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-/* ---------------- PREFLIGHT ---------------- */
-
-app.options("/*", cors(corsOptions));
-
 /* ---------------- JSON ---------------- */
 
 app.use(express.json());
