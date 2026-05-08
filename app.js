@@ -8,43 +8,27 @@ const app = express();
 /* ---------------- CORS ---------------- */
 
 const corsOptions = {
-  origin: "https://vokko-tawny.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: [
+    "https://vokko-tawny.vercel.app"
+  ],
+
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "OPTIONS"
+  ],
+
   allowedHeaders: [
     "Content-Type",
     "Authorization"
   ],
+
   credentials: true
 };
 
 app.use(cors(corsOptions));
-
-/* ---------------- MANUAL HEADERS ---------------- */
-
-app.use((req, res, next) => {
-
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://vokko-tawny.vercel.app"
-  );
-
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-
-  if (req.method === "OPTIONS") {
-
-    return res.sendStatus(200);
-  }
-
-  next();
-});
 
 /* ---------------- JSON ---------------- */
 
@@ -67,6 +51,16 @@ app.get("/", (req, res) => {
   res.json({
     status: "Vokko backend active 🚀",
     time: new Date()
+  });
+
+});
+
+/* ---------------- 404 ---------------- */
+
+app.use((req, res) => {
+
+  res.status(404).json({
+    error: "Route not found"
   });
 
 });
