@@ -4,7 +4,7 @@ import {
 
 import toast from "react-hot-toast";
 
-export default function WithdrawPage({
+function WithdrawPage({
   points,
   api
 }) {
@@ -15,29 +15,18 @@ export default function WithdrawPage({
   const [walletAddress, setWalletAddress] =
     useState("");
 
-  const [loading, setLoading] =
-    useState(false);
-
-  /* ---------------- SUBMIT ---------------- */
-
   const submitWithdraw =
     async () => {
 
       try {
 
-        setLoading(true);
-
         const token =
-          localStorage.getItem(
-            "token"
-          );
+          localStorage.getItem("token");
 
         await api.post(
           "/users/withdraw",
           {
-            amount:
-              Number(amount),
-
+            amount,
             walletAddress
           },
           {
@@ -60,80 +49,117 @@ export default function WithdrawPage({
         console.log(err);
 
         toast.error(
-          err.response?.data?.error ||
           "Withdraw failed"
         );
-
-      } finally {
-
-        setLoading(false);
       }
     };
 
   return (
 
-    <div>
+    <div className="text-white">
 
-      <h1 className="text-5xl font-black mb-10">
-        Withdraw 💸
-      </h1>
+      {/* HEADER */}
 
-      <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 max-w-2xl">
+      <div className="mb-10">
 
-        {/* POINTS */}
+        <h1 className="text-5xl font-black">
 
-        <div className="mb-8">
+          Withdraw 💸
 
-          <p className="text-slate-400 text-lg">
-            Available Points
-          </p>
+        </h1>
 
-          <h2 className="text-5xl font-black text-yellow-400 mt-3">
-            {points}
-          </h2>
+        <p className="text-slate-400 mt-3 text-xl">
 
-        </div>
+          Request a payout from your reward balance.
+
+        </p>
+
+      </div>
+
+      {/* TOP CARD */}
+
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 mb-8">
+
+        <p className="text-slate-400 text-lg">
+
+          Available Balance
+
+        </p>
+
+        <h2 className="text-6xl font-black text-green-400 mt-4">
+
+          {points}
+
+        </h2>
+
+        <p className="text-slate-400 mt-3">
+
+          Reward Points
+
+        </p>
+
+      </div>
+
+      {/* FORM */}
+
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8">
+
+        <h2 className="text-3xl font-black">
+
+          Create Withdraw Request
+
+        </h2>
+
+        <p className="text-slate-400 mt-3 text-lg">
+
+          Enter your payout details below.
+
+        </p>
 
         {/* AMOUNT */}
 
-        <div className="mb-6">
+        <div className="mt-8">
 
-          <p className="text-slate-300 mb-3 text-lg">
-            Withdraw Amount
+          <p className="text-slate-400 text-sm">
+
+            Amount
+
           </p>
 
           <input
             type="number"
+            placeholder="Enter amount"
             value={amount}
-            onChange={(e) => {
+            onChange={(e) =>
               setAmount(
                 e.target.value
-              );
-            }}
-            placeholder="Enter amount"
-            className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none"
+              )
+            }
+            className="w-full mt-3 p-5 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
           />
 
         </div>
 
         {/* WALLET */}
 
-        <div className="mb-8">
+        <div className="mt-6">
 
-          <p className="text-slate-300 mb-3 text-lg">
+          <p className="text-slate-400 text-sm">
+
             Wallet Address
+
           </p>
 
           <input
             type="text"
+            placeholder="Enter wallet address"
             value={walletAddress}
-            onChange={(e) => {
+            onChange={(e) =>
               setWalletAddress(
                 e.target.value
-              );
-            }}
-            placeholder="Enter wallet address"
-            className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none"
+              )
+            }
+            className="w-full mt-3 p-5 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
           />
 
         </div>
@@ -142,14 +168,11 @@ export default function WithdrawPage({
 
         <button
           onClick={submitWithdraw}
-          disabled={loading}
-          className="w-full bg-yellow-500 hover:bg-yellow-400 transition text-black font-bold py-4 rounded-2xl text-lg"
+          className="mt-10 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold px-10 py-5 rounded-2xl text-lg shadow-2xl"
         >
-          {
-            loading
-              ? "Processing..."
-              : "Submit Withdraw 🚀"
-          }
+
+          Submit Request 🚀
+
         </button>
 
       </div>
@@ -157,3 +180,5 @@ export default function WithdrawPage({
     </div>
   );
 }
+
+export default WithdrawPage;
