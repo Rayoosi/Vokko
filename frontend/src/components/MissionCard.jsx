@@ -21,6 +21,13 @@ function MissionCard({
 
     setShowAd(true);
 
+    /* ---------------- OPEN REAL AD ---------------- */
+
+    window.open(
+      "https://omg10.com/4/10986551",
+      "_blank"
+    );
+
     let timer = 5;
 
     setCountdown(timer);
