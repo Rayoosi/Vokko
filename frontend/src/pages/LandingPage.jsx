@@ -9,27 +9,17 @@ export default function LandingPage({
 
   const buyVip = async (plan) => {
 
-    console.log("BUY VIP START");
-    console.log("PLAN:", plan);
-
     try {
 
       const token =
         localStorage.getItem("token");
 
-      console.log("TOKEN:");
-      console.log(token);
-
       if (!token) {
-
-        console.log("NO TOKEN");
 
         alert("Please login first");
 
         return;
       }
-
-      console.log("SENDING REQUEST");
 
       const res =
         await api.post(
@@ -45,34 +35,15 @@ export default function LandingPage({
           }
         );
 
-      console.log("SERVER RESPONSE:");
-      console.log(res.data);
-
       if (res.data.url) {
-
-        console.log("REDIRECTING");
 
         window.location.href =
           res.data.url;
-
-      } else {
-
-        console.log("NO URL RECEIVED");
       }
 
     } catch (err) {
 
-      console.log("VIP ERROR:");
       console.log(err);
-
-      if (err.response) {
-
-        console.log("ERROR DATA:");
-        console.log(err.response.data);
-
-        console.log("ERROR STATUS:");
-        console.log(err.response.status);
-      }
 
       alert("Payment error");
     }
@@ -105,18 +76,20 @@ export default function LandingPage({
 
   return (
 
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#060816] via-[#0f172a] to-black text-white overflow-x-hidden">
 
       {/* NAVBAR */}
 
-      <header className="border-b border-slate-800 sticky top-0 z-50 backdrop-blur-xl bg-slate-950/80">
+      <header className="border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl bg-black/20">
 
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-5 flex items-center justify-between">
 
           <div className="flex items-center gap-3">
 
-            <div className="w-10 h-10 rounded-2xl bg-yellow-500 flex items-center justify-center text-black font-black">
-              R
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center text-white font-black shadow-lg">
+
+              V
+
             </div>
 
             <div>
@@ -137,21 +110,21 @@ export default function LandingPage({
 
             <a
               href="#vip"
-              className="hover:text-yellow-400 transition"
+              className="hover:text-cyan-400 transition"
             >
               VIP Plans
             </a>
 
             <a
               href="#referrals"
-              className="hover:text-yellow-400 transition"
+              className="hover:text-cyan-400 transition"
             >
               Referrals
             </a>
 
             <a
               href="#auth"
-              className="hover:text-yellow-400 transition"
+              className="hover:text-cyan-400 transition"
             >
               Login
             </a>
@@ -164,43 +137,49 @@ export default function LandingPage({
 
       {/* HERO */}
 
-      <section className="px-6 md:px-16 py-20 border-b border-slate-800">
+      <section className="px-6 md:px-16 py-24 border-b border-white/10">
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
 
           <div>
 
-            <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-semibold mb-8">
+            <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-400/20 text-cyan-400 px-4 py-2 rounded-full text-sm font-semibold mb-8">
+
               Vokko Rewards Platform 🚀
+
             </div>
 
             <h1 className="text-5xl md:text-7xl font-black leading-tight">
 
               Earn Daily Rewards
 
-              <span className="text-yellow-400 block mt-2">
+              <span className="text-cyan-400 block mt-2 drop-shadow-[0_0_15px_rgba(34,211,238,0.7)]">
+
                 With VIP Plans
+
               </span>
 
             </h1>
 
             <p className="text-slate-400 text-lg md:text-xl mt-8 leading-relaxed max-w-2xl">
+
               Complete missions, invite referrals, upgrade your VIP level,
               and grow your daily passive rewards inside a modern rewards ecosystem.
+
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-10">
 
               <a
                 href="#auth"
-                className="bg-yellow-500 hover:bg-yellow-400 transition text-black font-bold px-8 py-4 rounded-2xl text-lg text-center"
+                className="bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold px-8 py-4 rounded-2xl text-lg text-center shadow-xl"
               >
                 Start Earning 🚀
               </a>
 
               <a
                 href="#vip"
-                className="bg-slate-800 hover:bg-slate-700 transition px-8 py-4 rounded-2xl text-lg border border-slate-700 text-center"
+                className="bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition px-8 py-4 rounded-2xl text-lg text-center"
               >
                 Explore VIP Plans
               </a>
@@ -209,11 +188,11 @@ export default function LandingPage({
 
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* RIGHT CARD */}
 
           <div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl">
 
               <div className="flex items-center justify-between mb-8">
 
@@ -223,36 +202,46 @@ export default function LandingPage({
                     Total Points
                   </p>
 
-                  <h2 className="text-5xl font-black text-yellow-400 mt-2">
+                  <h2 className="text-5xl font-black text-cyan-400 mt-2">
+
                     14,920
+
                   </h2>
 
                 </div>
 
                 <div className="bg-green-500/20 text-green-400 px-4 py-2 rounded-xl font-bold">
+
                   VIP 4
+
                 </div>
 
               </div>
 
               <div className="space-y-4">
 
-                <div className="bg-slate-800 rounded-2xl p-5 flex items-center justify-between">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
 
                   <div>
 
                     <p className="font-bold text-lg">
+
                       Daily VIP Reward
+
                     </p>
 
                     <p className="text-slate-400 mt-1">
+
                       Automatic daily income
+
                     </p>
 
                   </div>
 
                   <div className="text-green-400 text-2xl font-black">
+
                     +8.2
+
                   </div>
 
                 </div>
@@ -283,7 +272,9 @@ export default function LandingPage({
             </h2>
 
             <p className="text-slate-400 text-xl mt-6 max-w-2xl mx-auto">
+
               Upgrade your account and unlock higher passive daily rewards.
+
             </p>
 
           </div>
@@ -294,7 +285,7 @@ export default function LandingPage({
 
               <div
                 key={plan.name}
-                className="bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:border-yellow-500/40 transition duration-300"
+                className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:border-cyan-400/40 transition duration-300"
               >
 
                 <div className="flex items-center justify-between">
@@ -303,8 +294,10 @@ export default function LandingPage({
                     {plan.name}
                   </h3>
 
-                  <div className="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-xl text-sm font-bold">
+                  <div className="bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-xl text-sm font-bold">
+
                     ACTIVE
+
                   </div>
 
                 </div>
@@ -315,36 +308,40 @@ export default function LandingPage({
                     Price
                   </p>
 
-                  <h4 className="text-5xl font-black mt-3 text-yellow-400">
+                  <h4 className="text-5xl font-black mt-3 text-cyan-400">
+
                     {plan.price}
+
                   </h4>
 
                 </div>
 
-                <div className="mt-10 bg-slate-800 rounded-2xl p-5">
+                <div className="mt-10 bg-white/5 border border-white/10 rounded-2xl p-5">
 
                   <p className="text-slate-400">
+
                     Daily Reward
+
                   </p>
 
                   <h5 className="text-3xl font-black mt-2 text-green-400">
+
                     {plan.reward}
+
                   </h5>
 
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => {
-
-                    console.log("VIP BUTTON CLICKED");
-
-                    buyVip(plan.name);
-
-                  }}
-                  className="w-full mt-10 bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-4 rounded-2xl text-lg cursor-pointer"
+                  onClick={() =>
+                    buyVip(plan.name)
+                  }
+                  className="w-full mt-10 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg cursor-pointer"
                 >
+
                   Upgrade 🚀
+
                 </button>
 
               </div>
@@ -357,54 +354,11 @@ export default function LandingPage({
 
       </section>
 
-      {/* REFERRALS */}
-
-      <section
-        id="referrals"
-        className="px-6 md:px-16 py-24 border-t border-slate-800 border-b"
-      >
-
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-
-          <div>
-
-            <h2 className="text-5xl font-black leading-tight">
-
-              Invite Friends
-
-              <span className="text-blue-400 block mt-2">
-                Earn More Rewards
-              </span>
-
-            </h2>
-
-            <p className="text-slate-400 text-xl mt-8 leading-relaxed">
-              Share your referral link and receive bonus rewards whenever your invited users upgrade their VIP plans.
-            </p>
-
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
-
-            <p className="text-slate-400 text-lg">
-              Example Referral Link
-            </p>
-
-            <div className="bg-slate-800 rounded-2xl p-5 mt-5 break-all text-yellow-400 font-bold">
-              https://rayoo.app/?ref=rayoo483
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* AUTH SECTION */}
+      {/* AUTH */}
 
       <section
         id="auth"
-        className="px-6 md:px-16 py-24 border-t border-slate-800"
+        className="px-6 md:px-16 py-24 border-t border-white/10"
       >
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
@@ -415,14 +369,18 @@ export default function LandingPage({
 
               Ready To Start?
 
-              <span className="text-yellow-400 block mt-2">
+              <span className="text-cyan-400 block mt-2">
+
                 Create Your Account 🚀
+
               </span>
 
             </h2>
 
             <p className="text-slate-400 text-xl mt-8 leading-relaxed">
+
               Login or create your account and start earning rewards through VIP plans, referrals, and daily missions.
+
             </p>
 
           </div>
