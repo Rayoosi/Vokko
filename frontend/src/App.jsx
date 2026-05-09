@@ -310,6 +310,7 @@ function App() {
                         setMission={setMission}
                         setPoints={setPoints}
                         api={api}
+                        user={user}
                       />
 
                     )}
@@ -344,6 +345,7 @@ function App() {
                         setMission={setMission}
                         setPoints={setPoints}
                         api={api}
+                        user={user}
                       />
 
                     )}
