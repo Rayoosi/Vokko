@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 function MissionCard({
   mission,
@@ -75,11 +76,19 @@ function MissionCard({
 
           setPoints(updatedUser.data.points);
 
+          toast.success(
+            "Mission completed 🎉"
+          );
+
           setShowAd(false);
 
         } catch (err) {
 
           console.log(err);
+
+          toast.error(
+            "Something went wrong"
+          );
 
           setShowAd(false);
         }
@@ -285,7 +294,9 @@ function MissionCard({
 
             navigator.clipboard.writeText(referralLink);
 
-            alert("Referral link copied!");
+            toast.success(
+              "Referral link copied! 🚀"
+            );
           }}
           className="mt-6 bg-cyan-500 hover:bg-cyan-400 hover:scale-105 transition duration-300 text-black font-bold px-6 py-3 rounded-xl"
         >
