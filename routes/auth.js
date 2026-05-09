@@ -80,9 +80,11 @@ router.post("/register", async (req, res) => {
         role,
         plan,
         referral_code,
-        referred_by
+        referred_by,
+        streak,
+        last_login
       )
-      VALUES($1, $2, $3, $4, $5, $6)
+      VALUES($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE)
       RETURNING *
       `,
       [
@@ -91,7 +93,8 @@ router.post("/register", async (req, res) => {
         "user",
         "free",
         referralCode,
-        referredById
+        referredById,
+        1
       ]
     );
 
@@ -113,6 +116,17 @@ router.post("/register", async (req, res) => {
           referredById,
           5
         ]
+      );
+
+      /* ---------------- UPDATE REFERRER POINTS ---------------- */
+
+      await db.query(
+        `
+        UPDATE users
+        SET points = points + 5
+        WHERE id = $1
+        `,
+        [referredById]
       );
     }
 
@@ -181,6 +195,53 @@ router.post("/login", async (req, res) => {
         error: "Wrong password"
       });
     }
+
+    /* ---------------- STREAK SYSTEM ---------------- */
+
+    const today = new Date();
+
+    const lastLogin =
+      user.last_login
+        ? new Date(user.last_login)
+        : null;
+
+    let streak = user.streak || 1;
+
+    if (lastLogin) {
+
+      const diffTime =
+        today - lastLogin;
+
+      const diffDays =
+        Math.floor(
+          diffTime / (
+            1000 * 60 * 60 * 24
+          )
+        );
+
+      if (diffDays === 1) {
+
+        streak += 1;
+
+      } else if (diffDays > 1) {
+
+        streak = 1;
+      }
+    }
+
+    /* ---------------- UPDATE USER ---------------- */
+
+    await db.query(
+      `
+      UPDATE users
+      SET streak=$1,
+          last_login=CURRENT_DATE
+      WHERE id=$2
+      `,
+      [streak, user.id]
+    );
+
+    /* ---------------- TOKEN ---------------- */
 
     const token = jwt.sign(
       {

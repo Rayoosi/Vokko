@@ -18,7 +18,8 @@ router.get("/me", auth, async (req, res) => {
         username,
         role,
         vip_level,
-        referral_code
+        referral_code,
+        streak
       FROM users
       WHERE id=$1
       `,
@@ -78,13 +79,15 @@ router.get("/me", auth, async (req, res) => {
             `
             INSERT INTO points_transactions(
               user_id,
-              amount
+              amount,
+              type
             )
-            VALUES($1, $2)
+            VALUES($1, $2, $3)
             `,
             [
               req.user.id,
-              reward
+              reward,
+              "vip_reward"
             ]
           );
 
@@ -147,7 +150,8 @@ router.get(
             username,
             role,
             vip_level,
-            referral_code
+            referral_code,
+            streak
           FROM users
           WHERE id=$1
           `,
@@ -180,6 +184,21 @@ router.get(
           [req.user.id]
         );
 
+      /* ---------------- REFERRAL EARNINGS ---------------- */
+
+      const referralEarnings =
+        await db.query(
+          `
+          SELECT
+            COALESCE(SUM(amount),0)
+            AS total
+          FROM points_transactions
+          WHERE user_id=$1
+          AND type='referral'
+          `,
+          [req.user.id]
+        );
+
       res.json({
 
         user,
@@ -188,7 +207,10 @@ router.get(
           pointsResult.rows[0].points,
 
         totalReferrals:
-          referralsResult.rows[0].total
+          referralsResult.rows[0].total,
+
+        referralEarnings:
+          referralEarnings.rows[0].total
 
       });
 
@@ -243,7 +265,8 @@ router.get("/", auth, async (req, res) => {
         id,
         username,
         role,
-        vip_level
+        vip_level,
+        streak
       FROM users
       ORDER BY id DESC
       `
@@ -346,13 +369,15 @@ router.post(
         INSERT INTO points_transactions
         (
           user_id,
-          amount
+          amount,
+          type
         )
-        VALUES($1, $2)
+        VALUES($1, $2, $3)
         `,
         [
           req.user.id,
-          -amount
+          -amount,
+          "withdraw"
         ]
       );
 
