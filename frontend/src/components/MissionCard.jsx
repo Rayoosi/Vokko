@@ -278,6 +278,15 @@ function MissionCard({
         </div>
 
         <button
+          onClick={() => {
+
+            const referralLink =
+              `https://vokko-tawny.vercel.app/register?ref=${user.referral_code}`;
+
+            navigator.clipboard.writeText(referralLink);
+
+            alert("Referral link copied!");
+          }}
           className="mt-6 bg-cyan-500 hover:bg-cyan-400 hover:scale-105 transition duration-300 text-black font-bold px-6 py-3 rounded-xl"
         >
           Invite Friends 🚀
