@@ -290,7 +290,7 @@ function MissionCard({
           onClick={() => {
 
             const referralLink =
-              `https://vokko-tawny.vercel.app/register?ref=${user.referral_code}`;
+  `https://vokko-tawny.vercel.app/?ref=${user.referral_code}`;
 
             navigator.clipboard.writeText(referralLink);
 
