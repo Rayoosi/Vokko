@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar({
   user,
   setUser
 }) {
+
+  const navigate = useNavigate();
 
   return (
 
@@ -74,16 +76,14 @@ function Sidebar({
 
       </div>
 
-      {/* LOGOUT */}
-
       <button
         onClick={() => {
 
-          localStorage.removeItem(
-            "token"
-          );
+          localStorage.removeItem("token");
 
           setUser(null);
+
+          navigate("/login");
         }}
         className="mt-8 bg-slate-700 hover:bg-slate-600 transition p-4 rounded-xl text-white font-bold"
       >

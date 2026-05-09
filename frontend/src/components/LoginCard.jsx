@@ -101,7 +101,7 @@ function LoginCard({
       <p className="text-slate-400 mt-3">
 
         {isRegister
-          ? "Create your Rayoo account"
+          ? "Create your Vokko account"
           : "Login to continue"}
 
       </p>
