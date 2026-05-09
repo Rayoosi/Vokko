@@ -17,11 +17,13 @@ function MissionCard({
   const [countdown, setCountdown] =
     useState(5);
 
+  /* ---------------- WATCH AD ---------------- */
+
   const watchAd = async () => {
 
     setShowAd(true);
 
-    /* ---------------- OPEN REAL AD ---------------- */
+    /* OPEN REAL AD */
 
     window.open(
       "https://omg10.com/4/10986551",
@@ -104,6 +106,58 @@ function MissionCard({
 
     }, 1000);
   };
+
+  /* ---------------- DAILY CLAIM ---------------- */
+
+  const claimDailyReward =
+    async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem("token");
+
+        const res =
+          await api.post(
+            "/missions/daily-claim",
+            {},
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+        toast.success(
+          `You received ${res.data.reward} points 🎉`
+        );
+
+        const updatedUser =
+          await api.get(
+            "/users/me",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+        setPoints(
+          updatedUser.data.points
+        );
+
+      } catch (err) {
+
+        toast.error(
+          err.response?.data?.message ||
+          "Already claimed today"
+        );
+      }
+    };
+
+  /* ---------------- REWARDS ---------------- */
 
   const rewards = {
     free: "+3",
@@ -267,7 +321,7 @@ function MissionCard({
 
         </div>
 
-        {/* BAR */}
+        {/* PROGRESS BAR */}
 
         <div className="w-full h-5 bg-black/30 rounded-full mt-8 overflow-hidden">
 
@@ -307,7 +361,7 @@ function MissionCard({
 
         </div>
 
-        {/* BUTTON */}
+        {/* WATCH BUTTON */}
 
         {!mission.completed && (
 
@@ -321,6 +375,47 @@ function MissionCard({
           </button>
 
         )}
+
+      </div>
+
+      {/* DAILY CLAIM */}
+
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 mt-8">
+
+        <div className="flex items-center justify-between flex-wrap gap-4">
+
+          <div>
+
+            <h2 className="text-3xl font-black">
+
+              Daily Reward 🎁
+
+            </h2>
+
+            <p className="text-slate-400 mt-3 text-lg">
+
+              Claim your free daily reward every 24 hours.
+
+            </p>
+
+          </div>
+
+          <div className="bg-green-500/20 border border-green-400/20 text-green-400 px-5 py-3 rounded-2xl font-bold">
+
+            +5 Points
+
+          </div>
+
+        </div>
+
+        <button
+          onClick={claimDailyReward}
+          className="mt-8 bg-gradient-to-r from-green-400 to-emerald-500 hover:scale-105 transition duration-300 text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-2xl"
+        >
+
+          Claim Reward 🎁
+
+        </button>
 
       </div>
 
