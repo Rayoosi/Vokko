@@ -213,6 +213,9 @@ function App() {
 
       console.log(err);
 
+      toast.error(
+        "Login failed"
+      );
     }
   };
 
@@ -222,17 +225,51 @@ function App() {
 
     return (
 
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#060816] via-[#0f172a] to-black flex items-center justify-center overflow-hidden relative">
 
-        <div className="text-center">
+        {/* GLOW */}
 
-          <h1 className="text-5xl font-bold">
-            Vokko 🚀
+        <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-[120px] rounded-full top-[-100px] left-[-100px]" />
+
+        <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-[120px] rounded-full bottom-[-100px] right-[-100px]" />
+
+        {/* CONTENT */}
+
+        <div className="relative z-10 flex flex-col items-center">
+
+          {/* LOGO */}
+
+          <div className="w-28 h-28 rounded-[32px] bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center text-5xl font-black text-white shadow-[0_0_50px_rgba(34,211,238,0.5)] animate-pulse">
+
+            V
+
+          </div>
+
+          {/* TITLE */}
+
+          <h1 className="text-6xl font-black text-white mt-8 tracking-tight">
+
+            Vokko
+
           </h1>
 
-          <p className="text-slate-400 mt-4 text-lg">
+          <p className="text-slate-400 text-xl mt-4">
+
             Loading platform...
+
           </p>
+
+          {/* DOTS */}
+
+          <div className="flex gap-3 mt-10">
+
+            <div className="w-4 h-4 rounded-full bg-cyan-400 animate-bounce" />
+
+            <div className="w-4 h-4 rounded-full bg-purple-400 animate-bounce delay-100" />
+
+            <div className="w-4 h-4 rounded-full bg-pink-400 animate-bounce delay-200" />
+
+          </div>
 
         </div>
 
@@ -281,7 +318,7 @@ function App() {
 
       ) : (
 
-        <div className="min-h-screen bg-slate-950 text-white flex flex-col md:flex-row">
+        <div className="min-h-screen bg-gradient-to-br from-[#060816] via-[#0f172a] to-black text-white flex flex-col md:flex-row">
 
           <Sidebar
             user={user}
@@ -332,10 +369,6 @@ function App() {
                 path="/missions"
                 element={
                   <div>
-
-                    <h1 className="text-4xl font-bold">
-                      Missions 🎯
-                    </h1>
 
                     {mission && (
 
