@@ -83,7 +83,7 @@ function Sidebar({
 
           setUser(null);
 
-          navigate("/login");
+          window.location.href = "https://vokko-tawny.vercel.app/";
         }}
         className="mt-8 bg-slate-700 hover:bg-slate-600 transition p-4 rounded-xl text-white font-bold"
       >
