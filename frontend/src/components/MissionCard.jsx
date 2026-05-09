@@ -91,6 +91,62 @@ function MissionCard({
 
     <>
 
+      {/* STATS */}
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+        <div className="bg-slate-800 rounded-2xl p-5">
+
+          <p className="text-slate-400 text-sm">
+            Total Points
+          </p>
+
+          <h2 className="text-3xl font-bold text-yellow-400 mt-2">
+            {points}
+          </h2>
+
+        </div>
+
+        <div className="bg-slate-800 rounded-2xl p-5">
+
+          <p className="text-slate-400 text-sm">
+            Mission Progress
+          </p>
+
+          <h2 className="text-3xl font-bold text-cyan-400 mt-2">
+            {mission.ads_watched}/7
+          </h2>
+
+        </div>
+
+        <div className="bg-slate-800 rounded-2xl p-5">
+
+          <p className="text-slate-400 text-sm">
+            Status
+          </p>
+
+          <h2 className="text-3xl font-bold text-green-400 mt-2">
+            {mission.completed ? "Done" : "Active"}
+          </h2>
+
+        </div>
+
+        <div className="bg-slate-800 rounded-2xl p-5">
+
+          <p className="text-slate-400 text-sm">
+            Reward
+          </p>
+
+          <h2 className="text-3xl font-bold text-pink-400 mt-2">
+            +12
+          </h2>
+
+        </div>
+
+      </div>
+
+      {/* MISSION CARD */}
+
       <div className="bg-slate-800 rounded-2xl p-6 mt-6">
 
         <div className="flex items-center justify-between">
@@ -127,6 +183,8 @@ function MissionCard({
 
         </div>
 
+        {/* PROGRESS BAR */}
+
         <div className="w-full bg-slate-700 h-4 rounded-full mt-6 overflow-hidden">
 
           <div
@@ -139,23 +197,27 @@ function MissionCard({
 
         </div>
 
+        {/* INFO */}
+
         <div className="flex items-center justify-between mt-4">
 
           <p className="text-slate-400">
-            {mission.ads_watched}/7 watched
+            Ads Watched: {mission.ads_watched} / 7
           </p>
 
           <p className="text-yellow-400 font-bold">
-            {points} points
+            {points} Points
           </p>
 
         </div>
+
+        {/* BUTTON */}
 
         {!mission.completed && (
 
           <button
             onClick={watchAd}
-            className="mt-6 bg-yellow-500 hover:bg-yellow-400 transition text-black font-bold px-6 py-3 rounded-xl"
+            className="mt-6 bg-yellow-500 hover:bg-yellow-400 hover:scale-105 transition duration-300 text-black font-bold px-6 py-3 rounded-xl"
           >
             Watch Ad 📺
           </button>
