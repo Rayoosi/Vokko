@@ -46,7 +46,10 @@ router.get("/daily", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log(err);
+    console.log(
+      "DAILY MISSION ERROR:",
+      err
+    );
 
     res.status(500).json({
       error: err.message
@@ -191,7 +194,10 @@ router.post("/watch-ad", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log(err);
+    console.log(
+      "WATCH AD ERROR:",
+      err
+    );
 
     res.status(500).json({
       error: err.message
@@ -220,12 +226,24 @@ router.post(
         await db.query(
           `
           SELECT
-            last_daily_claim
+            last_daily_claim,
+            points
           FROM users
           WHERE id = $1
           `,
           [userId]
         );
+
+      if (
+        userResult.rows.length === 0
+      ) {
+
+        return res.status(404)
+          .json({
+            error:
+              "User not found"
+          });
+      }
 
       const user =
         userResult.rows[0];
@@ -246,7 +264,7 @@ router.post(
           });
       }
 
-      /* ---------------- UPDATE USER POINTS ---------------- */
+      /* ---------------- UPDATE USER ---------------- */
 
       await db.query(
         `
@@ -285,11 +303,13 @@ router.post(
 
     } catch (err) {
 
-      console.log(err);
+      console.log(
+        "DAILY CLAIM ERROR:",
+        err
+      );
 
       res.status(500).json({
-        message:
-          "Server error"
+        error: err.message
       });
     }
   }
