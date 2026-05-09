@@ -83,6 +83,10 @@ function LoginCard({
 
       console.log(err);
 
+      toast.error(
+        "Something went wrong"
+      );
+
     }
   };
 
@@ -106,6 +110,8 @@ function LoginCard({
 
       </p>
 
+      {/* USERNAME */}
+
       <input
         placeholder="Username"
         value={username}
@@ -116,6 +122,8 @@ function LoginCard({
         }
         className="w-full mt-8 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
       />
+
+      {/* PASSWORD */}
 
       <input
         type="password"
@@ -129,17 +137,39 @@ function LoginCard({
         className="w-full mt-4 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
       />
 
+      {/* REFERRAL INPUT */}
+
+      {isRegister && (
+
+        <input
+          type="text"
+          placeholder="Referral Code (optional)"
+          value={referralCode}
+          onChange={(e) =>
+            setReferralCode(
+              e.target.value
+            )
+          }
+          className="w-full mt-4 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
+        />
+
+      )}
+
+      {/* AUTO REFERRAL DETECTED */}
+
       {isRegister && referralCode && (
 
         <div className="mt-4 bg-green-500/20 text-green-400 p-3 rounded-2xl">
 
-          Referral:
+          Referral Code:
           {" "}
           {referralCode}
 
         </div>
 
       )}
+
+      {/* SUBMIT */}
 
       <button
         onClick={submit}
@@ -151,6 +181,8 @@ function LoginCard({
           : "Login"}
 
       </button>
+
+      {/* TOGGLE */}
 
       <button
         onClick={() =>
