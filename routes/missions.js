@@ -89,6 +89,8 @@ router.post("/watch-ad", auth, async (req, res) => {
 
     let completed = false;
 
+    let reward = 0;
+
     /* ---------------- COMPLETE MISSION ---------------- */
 
     if (newCount >= 7) {
@@ -104,17 +106,17 @@ router.post("/watch-ad", auth, async (req, res) => {
 
       const rewards = {
         free: [1, 3],
-        vip1: [3, 5],
-        vip2: [5, 7],
-        vip3: [8, 12]
+        starter: [3, 5],
+        pro: [5, 8],
+        elite: [8, 12]
       };
 
       const [min, max] = rewards[userPlan] || [1, 3];
 
-      const reward =
+      reward =
         Math.floor(Math.random() * (max - min + 1)) + min;
 
-      /* ---------------- ADD POINTS ---------------- */
+      /* ---------------- SAVE TRANSACTION ---------------- */
 
       await db.query(
         `
@@ -122,6 +124,17 @@ router.post("/watch-ad", auth, async (req, res) => {
         VALUES($1, $2)
         `,
         [req.user.id, reward]
+      );
+
+      /* ---------------- UPDATE USER POINTS ---------------- */
+
+      await db.query(
+        `
+        UPDATE users
+        SET points = points + $1
+        WHERE id = $2
+        `,
+        [reward, req.user.id]
       );
     }
 
@@ -139,7 +152,8 @@ router.post("/watch-ad", auth, async (req, res) => {
 
     res.json({
       watched: newCount,
-      completed
+      completed,
+      reward
     });
 
   } catch (err) {
