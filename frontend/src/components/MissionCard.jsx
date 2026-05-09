@@ -149,11 +149,11 @@ function MissionCard({
         <div className="bg-slate-800 rounded-2xl p-5">
 
           <p className="text-slate-400 text-sm">
-            Status
+            Daily Streak
           </p>
 
-          <h2 className="text-3xl font-bold text-green-400 mt-2">
-            {mission.completed ? "Done" : "Active"}
+          <h2 className="text-3xl font-bold text-pink-400 mt-2">
+            {user?.streak || 1} {(user?.streak || 1) === 1 ? "Day" : "Days"}
           </h2>
 
         </div>
@@ -164,7 +164,7 @@ function MissionCard({
             Reward
           </p>
 
-          <h2 className="text-3xl font-bold text-pink-400 mt-2">
+          <h2 className="text-3xl font-bold text-green-400 mt-2">
             {rewardDisplay}
           </h2>
 
