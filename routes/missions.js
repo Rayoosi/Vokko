@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const auth = require("../middleware/auth");
 const db = require("../config/db");
 
@@ -74,18 +75,21 @@ router.post("/watch-ad", auth, async (req, res) => {
       });
     }
 
-    const currentMission = mission.rows[0];
+    const currentMission =
+      mission.rows[0];
 
     /* ---------------- ALREADY COMPLETED ---------------- */
 
     if (currentMission.completed) {
 
       return res.json({
-        message: "Mission already completed"
+        message:
+          "Mission already completed"
       });
     }
 
-    const newCount = currentMission.ads_watched + 1;
+    const newCount =
+      currentMission.ads_watched + 1;
 
     let completed = false;
 
@@ -97,12 +101,18 @@ router.post("/watch-ad", auth, async (req, res) => {
 
       completed = true;
 
-      const userData = await db.query(
-        "SELECT plan FROM users WHERE id=$1",
-        [req.user.id]
-      );
+      const userData =
+        await db.query(
+          `
+          SELECT plan
+          FROM users
+          WHERE id=$1
+          `,
+          [req.user.id]
+        );
 
-      const userPlan = userData.rows[0].plan;
+      const userPlan =
+        userData.rows[0].plan;
 
       const rewards = {
         free: [1, 3],
@@ -111,30 +121,32 @@ router.post("/watch-ad", auth, async (req, res) => {
         elite: [8, 12]
       };
 
-      const [min, max] = rewards[userPlan] || [1, 3];
+      const [min, max] =
+        rewards[userPlan] || [1, 3];
 
       reward =
-        Math.floor(Math.random() * (max - min + 1)) + min;
+        Math.floor(
+          Math.random() *
+          (max - min + 1)
+        ) + min;
 
       /* ---------------- SAVE TRANSACTION ---------------- */
 
       await db.query(
         `
-        INSERT INTO points_transactions(user_id, amount)
-        VALUES($1, $2)
+        INSERT INTO points_transactions
+        (
+          user_id,
+          amount,
+          type
+        )
+        VALUES($1, $2, $3)
         `,
-        [req.user.id, reward]
-      );
-
-      /* ---------------- UPDATE USER POINTS ---------------- */
-
-      await db.query(
-        `
-        UPDATE users
-        SET points = points + $1
-        WHERE id = $2
-        `,
-        [reward, req.user.id]
+        [
+          req.user.id,
+          reward,
+          "mission_reward"
+        ]
       );
     }
 
@@ -147,7 +159,11 @@ router.post("/watch-ad", auth, async (req, res) => {
           completed=$2
       WHERE id=$3
       `,
-      [newCount, completed, currentMission.id]
+      [
+        newCount,
+        completed,
+        currentMission.id
+      ]
     );
 
     res.json({
@@ -182,11 +198,10 @@ router.post(
           .split("T")[0];
 
       const userResult =
-        await pool.query(
+        await db.query(
           `
           SELECT
-          last_daily_claim,
-          points
+            last_daily_claim
           FROM users
           WHERE id = $1
           `,
@@ -196,7 +211,7 @@ router.post(
       const user =
         userResult.rows[0];
 
-      /* ALREADY CLAIMED */
+      /* ---------------- ALREADY CLAIMED ---------------- */
 
       if (
         user.last_daily_claim &&
@@ -212,17 +227,34 @@ router.post(
           });
       }
 
-      /* ADD POINTS */
+      /* ---------------- SAVE CLAIM DATE ---------------- */
 
-      await pool.query(
+      await db.query(
         `
         UPDATE users
-        SET
-        points = points + 5,
-        last_daily_claim = CURRENT_DATE
+        SET last_daily_claim = CURRENT_DATE
         WHERE id = $1
         `,
         [userId]
+      );
+
+      /* ---------------- ADD POINTS ---------------- */
+
+      await db.query(
+        `
+        INSERT INTO points_transactions
+        (
+          user_id,
+          amount,
+          type
+        )
+        VALUES($1, $2, $3)
+        `,
+        [
+          userId,
+          5,
+          "daily_reward"
+        ]
       );
 
       res.json({
@@ -234,11 +266,10 @@ router.post(
 
       console.log(err);
 
-      res.status(500)
-        .json({
-          message:
-            "Server error"
-        });
+      res.status(500).json({
+        message:
+          "Server error"
+      });
     }
   }
 );
