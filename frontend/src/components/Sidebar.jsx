@@ -1,93 +1,173 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation
+} from "react-router-dom";
 
 function Sidebar({
   user,
   setUser
 }) {
 
-  const navigate = useNavigate();
+  const location =
+    useLocation();
+
+  const logout = () => {
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    setUser(null);
+
+    window.location.href = "/";
+  };
+
+  const menu = [
+
+    {
+      name: "Dashboard",
+      path: "/",
+      icon: "🏠"
+    },
+
+    {
+      name: "Profile",
+      path: "/profile",
+      icon: "👤"
+    },
+
+    {
+      name: "Missions",
+      path: "/missions",
+      icon: "🎯"
+    },
+
+    {
+      name: "Withdraw",
+      path: "/withdraw",
+      icon: "💸"
+    },
+
+    {
+      name: "History",
+      path: "/history",
+      icon: "📜"
+    },
+
+    {
+      name: "VIP Plans",
+      path: "/vip",
+      icon: "👑"
+    }
+
+  ];
 
   return (
 
-    <div className="w-full md:w-64 bg-slate-900 border-r border-slate-800 md:min-h-screen p-6 flex flex-col justify-between">
+    <div className="w-full md:w-[280px] min-h-screen bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between p-5">
+
+      {/* TOP */}
 
       <div>
 
-        <h1 className="text-3xl font-bold text-white mb-10">
-          Vokko 🚀
-        </h1>
+        {/* LOGO */}
 
-        <nav className="flex flex-col gap-4">
+        <div className="flex items-center gap-4 mb-10">
 
-          <Link
-            to="/"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            Dashboard
-          </Link>
+          <div className="w-14 h-14 rounded-3xl bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center text-2xl font-black text-white shadow-2xl">
 
-          <Link
-            to="/profile"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            Profile
-          </Link>
+            V
 
-          <Link
-            to="/missions"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            Missions
-          </Link>
+          </div>
 
-          <Link
-            to="/withdraw"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            Withdraw
-          </Link>
+          <div>
 
-          <Link
-            to="/history"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            History
-          </Link>
+            <h1 className="text-3xl font-black text-white">
 
-          <Link
-            to="/vip"
-            className="bg-slate-800 hover:bg-slate-700 transition p-4 rounded-xl text-white"
-          >
-            VIP Plans
-          </Link>
+              Vokko
 
-          {user.role === "admin" && (
+            </h1>
 
-            <Link
-              to="/admin"
-              className="bg-red-500 hover:bg-red-400 transition p-4 rounded-xl text-white font-bold"
-            >
-              Admin 👑
-            </Link>
+            <p className="text-slate-400 text-sm">
 
-          )}
+              Rewards Platform
 
-        </nav>
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* USER */}
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-5 mb-8">
+
+          <p className="text-slate-400 text-sm">
+
+            Logged in as
+
+          </p>
+
+          <h2 className="text-xl font-bold mt-2 text-cyan-400">
+
+            {user?.username}
+
+          </h2>
+
+        </div>
+
+        {/* MENU */}
+
+        <div className="space-y-3">
+
+          {menu.map((item) => {
+
+            const active =
+              location.pathname ===
+              item.path;
+
+            return (
+
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition duration-300 font-semibold ${
+                  active
+                    ? "bg-gradient-to-r from-cyan-400 to-purple-500 text-white shadow-xl scale-[1.02]"
+                    : "bg-white/5 border border-white/5 text-slate-300 hover:bg-white/10 hover:border-cyan-400/20 hover:text-white"
+                }`}
+              >
+
+                <span className="text-xl">
+
+                  {item.icon}
+
+                </span>
+
+                <span>
+
+                  {item.name}
+
+                </span>
+
+              </Link>
+
+            );
+          })}
+
+        </div>
 
       </div>
 
+      {/* LOGOUT */}
+
       <button
-        onClick={() => {
-
-          localStorage.removeItem("token");
-
-          setUser(null);
-
-          window.location.href = "https://vokko-tawny.vercel.app/";
-        }}
-        className="mt-8 bg-slate-700 hover:bg-slate-600 transition p-4 rounded-xl text-white font-bold"
+        onClick={logout}
+        className="w-full mt-10 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition text-red-400 font-bold py-4 rounded-2xl"
       >
+
         Logout 🚪
+
       </button>
 
     </div>
