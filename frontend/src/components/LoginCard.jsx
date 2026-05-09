@@ -49,7 +49,7 @@ function LoginCard({
 
     try {
 
-      /* ---------------- REGISTER ---------------- */
+      /* REGISTER */
 
       if (isRegister) {
 
@@ -72,7 +72,7 @@ function LoginCard({
         return;
       }
 
-      /* ---------------- LOGIN ---------------- */
+      /* LOGIN */
 
       await login(
         username,
@@ -86,29 +86,40 @@ function LoginCard({
       toast.error(
         "Something went wrong"
       );
-
     }
   };
 
   return (
 
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 w-full max-w-md">
+    <div className="w-full max-w-md bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl">
 
-      <h2 className="text-4xl font-black">
+      {/* TOP */}
 
-        {isRegister
-          ? "Create Account 🚀"
-          : "Welcome Back 👋"}
+      <div className="mb-8">
 
-      </h2>
+        <div className="w-16 h-16 rounded-3xl bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center text-3xl font-black text-white shadow-xl">
 
-      <p className="text-slate-400 mt-3">
+          V
 
-        {isRegister
-          ? "Create your Vokko account"
-          : "Login to continue"}
+        </div>
 
-      </p>
+        <h2 className="text-4xl font-black mt-6">
+
+          {isRegister
+            ? "Create Account 🚀"
+            : "Welcome Back 👋"}
+
+        </h2>
+
+        <p className="text-slate-400 mt-3 text-lg">
+
+          {isRegister
+            ? "Create your Vokko account"
+            : "Login to continue"}
+
+        </p>
+
+      </div>
 
       {/* USERNAME */}
 
@@ -120,7 +131,7 @@ function LoginCard({
             e.target.value
           )
         }
-        className="w-full mt-8 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
+        className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
       />
 
       {/* PASSWORD */}
@@ -134,10 +145,10 @@ function LoginCard({
             e.target.value
           )
         }
-        className="w-full mt-4 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
+        className="w-full mt-4 p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
       />
 
-      {/* REFERRAL INPUT */}
+      {/* REFERRAL */}
 
       {isRegister && (
 
@@ -150,30 +161,34 @@ function LoginCard({
               e.target.value
             )
           }
-          className="w-full mt-4 p-4 rounded-2xl bg-slate-800 border border-slate-700 outline-none text-white"
+          className="w-full mt-4 p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
         />
 
       )}
 
-      {/* AUTO REFERRAL DETECTED */}
+      {/* AUTO REFERRAL */}
 
       {isRegister && referralCode && (
 
-        <div className="mt-4 bg-green-500/20 text-green-400 p-3 rounded-2xl">
+        <div className="mt-4 bg-green-500/10 border border-green-400/20 text-green-400 p-4 rounded-2xl">
 
           Referral Code:
           {" "}
-          {referralCode}
+          <span className="font-bold">
+
+            {referralCode}
+
+          </span>
 
         </div>
 
       )}
 
-      {/* SUBMIT */}
+      {/* BUTTON */}
 
       <button
         onClick={submit}
-        className="w-full mt-8 bg-yellow-500 hover:bg-yellow-400 transition text-black font-bold py-4 rounded-2xl text-lg"
+        className="w-full mt-8 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-xl"
       >
 
         {isRegister
@@ -190,7 +205,7 @@ function LoginCard({
             !isRegister
           )
         }
-        className="w-full mt-4 text-slate-400 hover:text-white transition"
+        className="w-full mt-5 text-slate-400 hover:text-cyan-400 transition"
       >
 
         {isRegister
