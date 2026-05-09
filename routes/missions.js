@@ -164,4 +164,83 @@ router.post("/watch-ad", auth, async (req, res) => {
   }
 });
 
+/* ---------------- DAILY CLAIM ---------------- */
+
+router.post(
+  "/daily-claim",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const userId =
+        req.user.id;
+
+      const today =
+        new Date()
+          .toISOString()
+          .split("T")[0];
+
+      const userResult =
+        await pool.query(
+          `
+          SELECT
+          last_daily_claim,
+          points
+          FROM users
+          WHERE id = $1
+          `,
+          [userId]
+        );
+
+      const user =
+        userResult.rows[0];
+
+      /* ALREADY CLAIMED */
+
+      if (
+        user.last_daily_claim &&
+        user.last_daily_claim
+          .toISOString()
+          .split("T")[0] === today
+      ) {
+
+        return res.status(400)
+          .json({
+            message:
+              "Reward already claimed today"
+          });
+      }
+
+      /* ADD POINTS */
+
+      await pool.query(
+        `
+        UPDATE users
+        SET
+        points = points + 5,
+        last_daily_claim = CURRENT_DATE
+        WHERE id = $1
+        `,
+        [userId]
+      );
+
+      res.json({
+        success: true,
+        reward: 5
+      });
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500)
+        .json({
+          message:
+            "Server error"
+        });
+    }
+  }
+);
+
 module.exports = router;
