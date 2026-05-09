@@ -7,8 +7,10 @@ function HistoryPage({
   api
 }) {
 
-  const [pointsHistory, setPointsHistory] =
+  const [history, setHistory] =
     useState([]);
+
+  /* ---------------- LOAD HISTORY ---------------- */
 
   useEffect(() => {
 
@@ -18,11 +20,9 @@ function HistoryPage({
       try {
 
         const token =
-          localStorage.getItem(
-            "token"
-          );
+          localStorage.getItem("token");
 
-        const pointsRes =
+        const res =
           await api.get(
             "/users/points-history",
             {
@@ -33,9 +33,7 @@ function HistoryPage({
             }
           );
 
-        setPointsHistory(
-          pointsRes.data
-        );
+        setHistory(res.data);
 
       } catch (err) {
 
@@ -49,56 +47,78 @@ function HistoryPage({
 
   return (
 
-    <div>
+    <div className="text-white">
 
-      <h1 className="text-4xl font-bold">
-        History 📜
-      </h1>
+      {/* HEADER */}
 
-      <div className="bg-slate-800 rounded-2xl p-6 mt-8">
+      <div className="mb-10">
 
-        <h2 className="text-2xl font-bold mb-6">
-          Points Activity
-        </h2>
+        <h1 className="text-5xl font-black">
 
-        <div className="space-y-4">
+          History 📜
 
-          {pointsHistory.map((item) => (
+        </h1>
+
+        <p className="text-slate-400 mt-3 text-xl">
+
+          View all your rewards and transactions.
+
+        </p>
+
+      </div>
+
+      {/* TABLE */}
+
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden">
+
+        {/* HEAD */}
+
+        <div className="grid grid-cols-3 bg-white/5 border-b border-white/10 p-6 font-bold text-slate-300">
+
+          <div>
+            Amount
+          </div>
+
+          <div>
+            Type
+          </div>
+
+          <div>
+            Date
+          </div>
+
+        </div>
+
+        {/* DATA */}
+
+        {history.length === 0 ? (
+
+          <div className="p-10 text-center text-slate-400 text-lg">
+
+            No transactions found.
+
+          </div>
+
+        ) : (
+
+          history.map((item) => (
 
             <div
               key={item.id}
-              className="bg-slate-900 p-4 rounded-xl flex items-center justify-between"
+              className="grid grid-cols-3 p-6 border-b border-white/5 hover:bg-white/5 transition"
             >
 
-              <div>
-
-                <p className="font-bold">
-
-                  {item.amount > 0
-                    ? "Reward Earned"
-                    : "Withdraw"}
-
-                </p>
-
-                <p className="text-slate-400 text-sm">
-
-                  {new Date(
-                    item.created_at
-                  ).toLocaleString()}
-
-                </p>
-
-              </div>
+              {/* AMOUNT */}
 
               <div
-                className={
-                  item.amount > 0
-                    ? "text-green-400 font-bold"
-                    : "text-red-400 font-bold"
-                }
+                className={`font-bold ${
+                  Number(item.amount) >= 0
+                    ? "text-green-400"
+                    : "text-red-400"
+                }`}
               >
 
-                {item.amount > 0
+                {Number(item.amount) >= 0
                   ? "+"
                   : ""}
 
@@ -106,16 +126,33 @@ function HistoryPage({
 
               </div>
 
+              {/* TYPE */}
+
+              <div className="text-cyan-400 font-semibold">
+
+                {item.type || "Reward"}
+
+              </div>
+
+              {/* DATE */}
+
+              <div className="text-slate-400">
+
+                {new Date(
+                  item.created_at
+                ).toLocaleDateString()}
+
+              </div>
+
             </div>
 
-          ))}
+          ))
 
-        </div>
+        )}
 
       </div>
 
     </div>
-
   );
 }
 
