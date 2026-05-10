@@ -258,16 +258,21 @@ router.post(
 
     } catch (err) {
 
-      console.log(
-        "DAILY CLAIM ERROR:",
-        err
-      );
+  console.log(
+    "DAILY CLAIM ERROR FULL:"
+  );
 
-      res.status(500).json({
-        error: err.message
-      });
-    }
-  }
+  console.log(err);
+
+  console.log(err.message);
+
+  console.log(err.stack);
+
+  return res.status(500).json({
+    error: err.message,
+    stack: err.stack
+  });
+}
 );
 
 module.exports = router;
