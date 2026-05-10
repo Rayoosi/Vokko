@@ -252,8 +252,7 @@ router.post(
 
       if (
         user.last_daily_claim &&
-        user.last_daily_claim
-          .toISOString()
+        String(user.last_daily_claim)
           .split("T")[0] === today
       ) {
 
