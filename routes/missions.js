@@ -135,7 +135,7 @@ router.post("/watch-ad", auth, async (req, res) => {
           (max - min + 1)
         ) + min;
 
-      /* ---------------- ADD POINTS TO USER ---------------- */
+      /* ---------------- UPDATE USER POINTS ---------------- */
 
       await db.query(
         `
