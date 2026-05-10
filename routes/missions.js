@@ -19,8 +19,6 @@ router.get("/daily", auth, async (req, res) => {
       [req.user.id]
     );
 
-    /* ---------------- CREATE DAILY MISSION ---------------- */
-
     if (mission.rows.length === 0) {
 
       await db.query(
@@ -46,10 +44,7 @@ router.get("/daily", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log(
-      "DAILY MISSION ERROR:",
-      err
-    );
+    console.log("DAILY ERROR:", err);
 
     res.status(500).json({
       error: err.message
@@ -83,13 +78,10 @@ router.post("/watch-ad", auth, async (req, res) => {
     const currentMission =
       mission.rows[0];
 
-    /* ---------------- ALREADY COMPLETED ---------------- */
-
     if (currentMission.completed) {
 
       return res.status(400).json({
-        message:
-          "Mission already completed"
+        message: "Mission already completed"
       });
     }
 
@@ -100,42 +92,11 @@ router.post("/watch-ad", auth, async (req, res) => {
 
     let reward = 0;
 
-    /* ---------------- COMPLETE MISSION ---------------- */
-
     if (newCount >= 7) {
 
       completed = true;
 
-      const userData =
-        await db.query(
-          `
-          SELECT plan
-          FROM users
-          WHERE id = $1
-          `,
-          [req.user.id]
-        );
-
-      const userPlan =
-        userData.rows[0].plan;
-
-      const rewards = {
-        free: [1, 3],
-        starter: [3, 5],
-        pro: [5, 8],
-        elite: [8, 12]
-      };
-
-      const [min, max] =
-        rewards[userPlan] || [1, 3];
-
-      reward =
-        Math.floor(
-          Math.random() *
-          (max - min + 1)
-        ) + min;
-
-      /* ---------------- UPDATE USER POINTS ---------------- */
+      reward = 3;
 
       await db.query(
         `
@@ -148,8 +109,6 @@ router.post("/watch-ad", auth, async (req, res) => {
           req.user.id
         ]
       );
-
-      /* ---------------- SAVE TRANSACTION ---------------- */
 
       await db.query(
         `
@@ -168,8 +127,6 @@ router.post("/watch-ad", auth, async (req, res) => {
         ]
       );
     }
-
-    /* ---------------- UPDATE MISSION ---------------- */
 
     await db.query(
       `
@@ -194,10 +151,7 @@ router.post("/watch-ad", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log(
-      "WATCH AD ERROR:",
-      err
-    );
+    console.log("WATCH ERROR:", err);
 
     res.status(500).json({
       error: err.message
@@ -217,17 +171,10 @@ router.post(
       const userId =
         req.user.id;
 
-      const today =
-        new Date()
-          .toISOString()
-          .split("T")[0];
-
       const userResult =
         await db.query(
           `
-          SELECT
-            last_daily_claim,
-            points
+          SELECT *
           FROM users
           WHERE id = $1
           `,
@@ -238,11 +185,9 @@ router.post(
         userResult.rows.length === 0
       ) {
 
-        return res.status(404)
-          .json({
-            error:
-              "User not found"
-          });
+        return res.status(404).json({
+          error: "User not found"
+        });
       }
 
       const user =
@@ -250,20 +195,31 @@ router.post(
 
       /* ---------------- ALREADY CLAIMED ---------------- */
 
-      if (
-        user.last_daily_claim &&
-        String(user.last_daily_claim)
-          .split("T")[0] === today
-      ) {
+      if (user.last_daily_claim) {
 
-        return res.status(400)
-          .json({
-            message:
-              "Reward already claimed today"
-          });
+        const claimDate =
+          new Date(
+            user.last_daily_claim
+          )
+          .toISOString()
+          .split("T")[0];
+
+        const today =
+          new Date()
+          .toISOString()
+          .split("T")[0];
+
+        if (claimDate === today) {
+
+          return res.status(400)
+            .json({
+              message:
+                "Reward already claimed today"
+            });
+        }
       }
 
-      /* ---------------- UPDATE USER ---------------- */
+      /* ---------------- ADD POINTS ---------------- */
 
       await db.query(
         `
