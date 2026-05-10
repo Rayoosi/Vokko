@@ -44,7 +44,10 @@ router.get("/daily", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log("DAILY ERROR:", err);
+    console.log(
+      "DAILY ERROR:",
+      err
+    );
 
     res.status(500).json({
       error: err.message
@@ -81,7 +84,8 @@ router.post("/watch-ad", auth, async (req, res) => {
     if (currentMission.completed) {
 
       return res.status(400).json({
-        message: "Mission already completed"
+        message:
+          "Mission already completed"
       });
     }
 
@@ -151,7 +155,10 @@ router.post("/watch-ad", auth, async (req, res) => {
 
   } catch (err) {
 
-    console.log("WATCH ERROR:", err);
+    console.log(
+      "WATCH ERROR:",
+      err
+    );
 
     res.status(500).json({
       error: err.message
@@ -186,7 +193,8 @@ router.post(
       ) {
 
         return res.status(404).json({
-          error: "User not found"
+          error:
+            "User not found"
         });
       }
 
@@ -258,21 +266,22 @@ router.post(
 
     } catch (err) {
 
-  console.log(
-    "DAILY CLAIM ERROR FULL:"
-  );
+      console.log(
+        "DAILY CLAIM ERROR FULL:"
+      );
 
-  console.log(err);
+      console.log(err);
 
-  console.log(err.message);
+      console.log(err.message);
 
-  console.log(err.stack);
+      console.log(err.stack);
 
-  return res.status(500).json({
-    error: err.message,
-    stack: err.stack
-  });
-}
+      return res.status(500).json({
+        error: err.message,
+        stack: err.stack
+      });
+    }
+  }
 );
 
 module.exports = router;
