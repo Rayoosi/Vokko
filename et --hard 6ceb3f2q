@@ -1,0 +1,79 @@
+[33m24aa02e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m remove points transactions system
+[33mb7c3620[m fix me route
+[33md117a68[m fix missions clean
+[33m31bb485[m catch crash
+[33me956cc7[m version test
+[33ma1dba3d[m fix missions page
+[33md350d2b[m test backend
+[33mf1e9573[m Fix mission frontend
+[33mcaa9c0a[m Fix watch ad mission
+[33mef97bd0[m fix db
+[33m6ceb3f2[m Disable watch rewards
+[33mdb5a4d6[m Disable rewards system
+[33m44beb3e[m Debug daily claim
+[33mf1aef03[m Debug backend error
+[33mba02956[m Final fix daily reward
+[33m25af889[m Fix daily claim date
+[33m4789dc7[m Fix reward system
+[33mcb40fbc[m Add daily claim debug
+[33m68d68f4[m Fix reward system
+[33m74feda6[m Fix daily reward points
+[33m9e4e7a2[m Add daily reward system
+[33mf29563c[m Add daily claim backend
+[33ma7cb60c[m Connect mission ads to monetag
+[33m4b26e2c[m Add Monetag script
+[33m21910d2[m Fix monetag sw file
+[33m23287e5[m Add Monetag verification file
+[33mfc16f33[m Premium loading redesign
+[33m786366f[m Modern dashboard redesign
+[33m3bb7d3a[m Modern history redesign
+[33macb1733[m Modern withdraw redesign
+[33md59cbaf[m Modern VIP redesign
+[33m108011a[m Modern profile redesign
+[33mb1f468d[m Modern mission redesign
+[33mee6371b[m Modern sidebar redesign
+[33m32cf9fd[m Modern login card redesign
+[33m934aba7[m Modern landing page redesign
+[33me16ae10[m Fix referral redirect
+[33m5eb2209[m Add referral input system
+[33m18fa39e[m Improve mission notifications
+[33m6786ca5[m Add streak system and referral tracking
+[33m2536a61[m Add daily streak system
+[33m46f99fb[m Fix referral link
+[33m7e5586d[m Improve missions dashboard
+[33m29465dd[m Improve missions dashboard
+[33ma23916b[m Improve missions dashboard
+[33mbe38d5b[m Update missions system
+[33m277d4af[m Fix logout redirect
+[33mc20fb4e[m Fix logout redirect
+[33m72c0835[m fix frontend routing
+[33m7fcc534[m fix spa routing
+[33mdc64dbd[m add vercel rewrite
+[33mf98dc4b[m add payment page
+[33me5282e4[m fix vip payment button
+[33m29c6c7b[m fix login toast
+[33me257306[m remove fake login error
+[33m425c488[m fix login message
+[33m6429eee[m connect backend
+[33mf3b2b82[m final railway fix
+[33m7815cc6[m fix railway bind
+[33m093e85b[m Fix railway host binding
+[33m0d55b80[m Test minimal backend
+[33m8c944fe[m Downgrade express to v4
+[33m6aae513[m Fix database and backend
+[33md88301b[m clean cors fix
+[33me1f34a4[m Fix cors preflight
+[33m56aa6ee[m Remove express options crash
+[33m441b692[m Fix railway database
+[33m8fdf4a9[m Fix cors
+[33ma191df4[m Fix express 5 preflight
+[33ma351b7e[m Fix cors preflight
+[33md63fd72[m Fix cors for vercel
+[33m3393b07[m Fix api base url
+[33m8db8ecc[m Fix frontend api url
+[33mb870c2b[m Connect frontend to railway
+[33me45812f[m Fix railway backend
+[33ma902d95[m Fix package start script
+[33m30ffd50[m Add USDT VIP payment
+[33m60fa4f5[m Add USDT VIP payment
+[33m289157c[m Initial clean commit
