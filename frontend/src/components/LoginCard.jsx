@@ -83,7 +83,12 @@ function LoginCard({
 
       console.log(err);
 
+      console.log(
+        err.response?.data
+      );
+
       toast.error(
+        err.response?.data?.error ||
         "Something went wrong"
       );
     }
