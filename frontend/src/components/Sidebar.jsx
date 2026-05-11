@@ -58,7 +58,15 @@ function Sidebar({
       name: "VIP Plans",
       path: "/vip",
       icon: "👑"
-    }
+    },
+
+    ...(user?.role === "admin"
+      ? [{
+          name: "Admin",
+          path: "/admin",
+          icon: "🛠️"
+        }]
+      : [])
 
   ];
 
@@ -113,6 +121,12 @@ function Sidebar({
             {user?.username}
 
           </h2>
+
+          <p className="text-sm mt-2 text-purple-400 font-semibold">
+
+            {user?.role}
+
+          </p>
 
         </div>
 
