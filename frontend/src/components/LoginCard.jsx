@@ -10,10 +10,15 @@ function LoginCard({
   api
 }) {
 
+  /* ---------------- STATES ---------------- */
+
   const [isRegister, setIsRegister] =
     useState(false);
 
   const [username, setUsername] =
+    useState("");
+
+  const [email, setEmail] =
     useState("");
 
   const [password, setPassword] =
@@ -49,7 +54,7 @@ function LoginCard({
 
     try {
 
-      /* REGISTER */
+      /* ---------- REGISTER ---------- */
 
       if (isRegister) {
 
@@ -57,6 +62,7 @@ function LoginCard({
           "/auth/register",
           {
             username,
+            email,
             password,
             referredBy:
               referralCode
@@ -72,7 +78,7 @@ function LoginCard({
         return;
       }
 
-      /* LOGIN */
+      /* ---------- LOGIN ---------- */
 
       await login(
         username,
@@ -98,7 +104,7 @@ function LoginCard({
 
     <div className="w-full max-w-md bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl">
 
-      {/* TOP */}
+      {/* ---------------- TOP ---------------- */}
 
       <div className="mb-8">
 
@@ -126,10 +132,15 @@ function LoginCard({
 
       </div>
 
-      {/* USERNAME */}
+      {/* ---------------- USERNAME ---------------- */}
 
       <input
-        placeholder="Username"
+        type="text"
+        placeholder={
+          isRegister
+            ? "Username"
+            : "Username or Email"
+        }
         value={username}
         onChange={(e) =>
           setUsername(
@@ -139,7 +150,25 @@ function LoginCard({
         className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
       />
 
-      {/* PASSWORD */}
+      {/* ---------------- EMAIL ---------------- */}
+
+      {isRegister && (
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) =>
+            setEmail(
+              e.target.value
+            )
+          }
+          className="w-full mt-4 p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
+        />
+
+      )}
+
+      {/* ---------------- PASSWORD ---------------- */}
 
       <input
         type="password"
@@ -153,7 +182,7 @@ function LoginCard({
         className="w-full mt-4 p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
       />
 
-      {/* REFERRAL */}
+      {/* ---------------- REFERRAL ---------------- */}
 
       {isRegister && (
 
@@ -171,7 +200,7 @@ function LoginCard({
 
       )}
 
-      {/* AUTO REFERRAL */}
+      {/* ---------------- AUTO REFERRAL ---------------- */}
 
       {isRegister && referralCode && (
 
@@ -179,6 +208,7 @@ function LoginCard({
 
           Referral Code:
           {" "}
+
           <span className="font-bold">
 
             {referralCode}
@@ -189,7 +219,7 @@ function LoginCard({
 
       )}
 
-      {/* BUTTON */}
+      {/* ---------------- BUTTON ---------------- */}
 
       <button
         onClick={submit}
@@ -202,7 +232,7 @@ function LoginCard({
 
       </button>
 
-      {/* TOGGLE */}
+      {/* ---------------- TOGGLE ---------------- */}
 
       <button
         onClick={() =>

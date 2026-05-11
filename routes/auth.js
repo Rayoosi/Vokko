@@ -15,6 +15,7 @@ router.post("/register", async (req, res) => {
 
     const {
       username,
+      email,
       password,
       referredBy
     } = req.body;
@@ -22,20 +23,21 @@ router.post("/register", async (req, res) => {
     /* ---------------- CHECK USER ---------------- */
 
     const exists = await db.query(
-      `
-      SELECT *
-      FROM users
-      WHERE username=$1
-      `,
-      [username]
-    );
+  `
+  SELECT *
+  FROM users
+  WHERE username=$1
+  OR email=$2
+  `,
+  [username, email]
+);
 
-    if (exists.rows.length > 0) {
+if (exists.rows.length > 0) {
 
-      return res.status(400).json({
-        error: "Username already exists"
-      });
-    }
+  return res.status(400).json({
+    error: "Username or email already exists"
+  });
+}
 
     /* ---------------- HASH PASSWORD ---------------- */
 
@@ -76,6 +78,7 @@ router.post("/register", async (req, res) => {
       `
       INSERT INTO users(
         username,
+        email,
         password,
         role,
         plan,
@@ -84,18 +87,19 @@ router.post("/register", async (req, res) => {
         streak,
         last_login
       )
-      VALUES($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_DATE)
       RETURNING *
       `,
       [
-        username,
-        hashedPassword,
-        "user",
-        "free",
-        referralCode,
-        referredById,
-        1
-      ]
+  username,
+  email,
+  hashedPassword,
+  "user",
+  "free",
+  referralCode,
+  referredById,
+  1
+]
     );
 
     const user = result.rows[0];
@@ -162,7 +166,7 @@ router.post("/login", async (req, res) => {
   try {
 
     const {
-      username,
+      login,
       password
     } = req.body;
 
@@ -171,8 +175,9 @@ router.post("/login", async (req, res) => {
       SELECT *
       FROM users
       WHERE username=$1
+      OR email=$1
       `,
-      [username]
+      [login]
     );
 
     const user = result.rows[0];
