@@ -6,7 +6,7 @@ import {
 import {
   BrowserRouter,
   Routes,
-  Route
+ Route
 } from "react-router-dom";
 
 import {
@@ -129,68 +129,47 @@ function App() {
 
   /* ---------------- LOGIN ---------------- */
 
-const login = async (
-  login,
-  password
-) => {
-
-  try {
-
-    const res =
-      await api.post(
-        "/auth/login",
-        {
-          login,
-          password
-        }
-      );
-
-    console.log(
-      "LOGIN RESPONSE:",
-      res.data
-    );
-
-    const token =
-      res.data.token;
-
-    if (!token) {
-
-      toast.error(
-        "Token missing"
-      );
-
-      return;
-    }
-
-    localStorage.setItem(
-      "token",
-      token
-    );
-
-    const userRes =
-      await api.get(
-        "/users/me",
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`
-          }
-        }
-      );
-
-    setUser(
-      userRes.data.user
-    );
-
-    setPoints(
-      userRes.data.points
-    );
+  const login = async (
+    username,
+    password
+  ) => {
 
     try {
 
-      const missionRes =
+      const res =
+        await api.post(
+          "/auth/login",
+          {
+            username,
+            password
+          }
+        );
+
+      console.log(
+        "LOGIN RESPONSE:",
+        res.data
+      );
+
+      const token =
+        res.data.token;
+
+      if (!token) {
+
+        toast.error(
+          "Token missing"
+        );
+
+        return;
+      }
+
+      localStorage.setItem(
+        "token",
+        token
+      );
+
+      const userRes =
         await api.get(
-          "/missions/daily",
+          "/users/me",
           {
             headers: {
               Authorization:
@@ -199,40 +178,60 @@ const login = async (
           }
         );
 
-      setMission(
-        missionRes.data
+      setUser(
+        userRes.data.user
       );
+
+      setPoints(
+        userRes.data.points
+      );
+
+      try {
+
+        const missionRes =
+          await api.get(
+            "/missions/daily",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+        setMission(
+          missionRes.data
+        );
+
+      } catch (err) {
+
+        console.log(
+          "Mission load failed"
+        );
+      }
+
+      toast.success(
+        "Login successful 🚀"
+      );
+
+      window.location.href =
+        "/";
 
     } catch (err) {
 
+      console.log(err);
+
       console.log(
-        "Mission load failed"
+        "LOGIN ERROR:",
+        err.response?.data
+      );
+
+      toast.error(
+        err.response?.data?.error ||
+        "Login failed"
       );
     }
-
-    toast.success(
-      "Login successful 🚀"
-    );
-
-    window.location.href =
-      "/";
-
-  } catch (err) {
-
-    console.log(err);
-
-    console.log(
-      "LOGIN ERROR:",
-      err.response?.data
-    );
-
-    toast.error(
-      err.response?.data?.error ||
-      "Login failed"
-    );
-  }
-};
-
+  };
 
   /* ---------------- LOADING ---------------- */
 
