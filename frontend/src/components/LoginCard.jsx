@@ -18,9 +18,6 @@ function LoginCard({
   const [username, setUsername] =
     useState("");
 
-  const [email, setEmail] =
-    useState("");
-
   const [password, setPassword] =
     useState("");
 
@@ -62,7 +59,6 @@ function LoginCard({
           "/auth/register",
           {
             username,
-            email,
             password,
             referredBy:
               referralCode
@@ -136,11 +132,7 @@ function LoginCard({
 
       <input
         type="text"
-        placeholder={
-          isRegister
-            ? "Username"
-            : "Username or Email"
-        }
+        placeholder="Username"
         value={username}
         onChange={(e) =>
           setUsername(
@@ -149,24 +141,6 @@ function LoginCard({
         }
         className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
       />
-
-      {/* ---------------- EMAIL ---------------- */}
-
-      {isRegister && (
-
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
-          }
-          className="w-full mt-4 p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
-        />
-
-      )}
 
       {/* ---------------- PASSWORD ---------------- */}
 
