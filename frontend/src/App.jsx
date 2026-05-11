@@ -66,8 +66,6 @@ function App() {
           return;
         }
 
-        /* ---------------- USER ---------------- */
-
         const userRes =
           await api.get(
             "/users/me",
@@ -86,8 +84,6 @@ function App() {
         setPoints(
           userRes.data.points
         );
-
-        /* ---------------- MISSION ---------------- */
 
         try {
 
@@ -111,7 +107,6 @@ function App() {
           console.log(
             "Mission load failed"
           );
-
         }
 
       } catch (err) {
@@ -132,7 +127,112 @@ function App() {
 
   }, []);
 
-  /* ---------------- LOGIN ---------------- */ const login = async ( username, password ) => { try { const res = await api.post( "/auth/login", { username, password } ); console.log( "LOGIN RESPONSE:", res.data ); const token = res.data.token; if (!token) { toast.error( "Token missing" ); return; } localStorage.setItem( "token", token ); const userRes = await api.get( "/users/me", { headers: { Authorization: `Bearer ${token}` } } ); setUser( userRes.data.user ); setPoints( userRes.data.points ); try { const missionRes = await api.get( "/missions/daily", { headers: { Authorization: `Bearer ${token}` } } ); setMission( missionRes.data ); } catch (err) { console.log( "Mission load failed" ); } toast.success( "Login successful 🚀" ); window.location.href = "/"; } catch (err) { console.log(err); console.log( "LOGIN ERROR:", err.response?.data ); toast.error( err.response?.data?.error || "Login failed" ); } };
+  /* ---------------- LOGIN ---------------- */
+
+const login = async (
+  login,
+  password
+) => {
+
+  try {
+
+    const res =
+      await api.post(
+        "/auth/login",
+        {
+          login,
+          password
+        }
+      );
+
+    console.log(
+      "LOGIN RESPONSE:",
+      res.data
+    );
+
+    const token =
+      res.data.token;
+
+    if (!token) {
+
+      toast.error(
+        "Token missing"
+      );
+
+      return;
+    }
+
+    localStorage.setItem(
+      "token",
+      token
+    );
+
+    const userRes =
+      await api.get(
+        "/users/me",
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+      );
+
+    setUser(
+      userRes.data.user
+    );
+
+    setPoints(
+      userRes.data.points
+    );
+
+    try {
+
+      const missionRes =
+        await api.get(
+          "/missions/daily",
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`
+            }
+          }
+        );
+
+      setMission(
+        missionRes.data
+      );
+
+    } catch (err) {
+
+      console.log(
+        "Mission load failed"
+      );
+    }
+
+    toast.success(
+      "Login successful 🚀"
+    );
+
+    window.location.href =
+      "/";
+
+  } catch (err) {
+
+    console.log(err);
+
+    console.log(
+      "LOGIN ERROR:",
+      err.response?.data
+    );
+
+    toast.error(
+      err.response?.data?.error ||
+      "Login failed"
+    );
+  }
+};
+
 
   /* ---------------- LOADING ---------------- */
 
@@ -142,25 +242,17 @@ function App() {
 
       <div className="min-h-screen bg-gradient-to-br from-[#060816] via-[#0f172a] to-black flex items-center justify-center overflow-hidden relative">
 
-        {/* GLOW */}
-
         <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-[120px] rounded-full top-[-100px] left-[-100px]" />
 
         <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-[120px] rounded-full bottom-[-100px] right-[-100px]" />
 
-        {/* CONTENT */}
-
         <div className="relative z-10 flex flex-col items-center">
-
-          {/* LOGO */}
 
           <div className="w-28 h-28 rounded-[32px] bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center text-5xl font-black text-white shadow-[0_0_50px_rgba(34,211,238,0.5)] animate-pulse">
 
             V
 
           </div>
-
-          {/* TITLE */}
 
           <h1 className="text-6xl font-black text-white mt-8 tracking-tight">
 
@@ -174,18 +266,6 @@ function App() {
 
           </p>
 
-          {/* DOTS */}
-
-          <div className="flex gap-3 mt-10">
-
-            <div className="w-4 h-4 rounded-full bg-cyan-400 animate-bounce" />
-
-            <div className="w-4 h-4 rounded-full bg-purple-400 animate-bounce delay-100" />
-
-            <div className="w-4 h-4 rounded-full bg-pink-400 animate-bounce delay-200" />
-
-          </div>
-
         </div>
 
       </div>
@@ -197,8 +277,6 @@ function App() {
     <BrowserRouter>
 
       <Toaster position="top-right" />
-
-      {/* ---------------- PUBLIC ---------------- */}
 
       {!user ? (
 
@@ -340,16 +418,6 @@ function App() {
                 }
               />
 
-              <Route
-                path="/success"
-                element={<SuccessPage />}
-              />
-
-              <Route
-                path="/cancel"
-                element={<CancelPage />}
-              />
-
             </Routes>
 
           </div>
@@ -359,7 +427,6 @@ function App() {
       )}
 
     </BrowserRouter>
-
   );
 }
 
