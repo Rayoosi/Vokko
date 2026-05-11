@@ -15,7 +15,6 @@ router.post("/register", async (req, res) => {
 
     const {
       username,
-      email,
       password,
       referredBy
     } = req.body;
@@ -23,21 +22,20 @@ router.post("/register", async (req, res) => {
     /* ---------------- CHECK USER ---------------- */
 
     const exists = await db.query(
-  `
-  SELECT *
-  FROM users
-  WHERE username=$1
-  OR email=$2
-  `,
-  [username, email]
-);
+      `
+      SELECT *
+      FROM users
+      WHERE username=$1
+      `,
+      [username]
+    );
 
-if (exists.rows.length > 0) {
+    if (exists.rows.length > 0) {
 
-  return res.status(400).json({
-    error: "Username or email already exists"
-  });
-}
+      return res.status(400).json({
+        error: "Username already exists"
+      });
+    }
 
     /* ---------------- HASH PASSWORD ---------------- */
 
@@ -78,7 +76,6 @@ if (exists.rows.length > 0) {
       `
       INSERT INTO users(
         username,
-        email,
         password,
         role,
         plan,
@@ -87,19 +84,18 @@ if (exists.rows.length > 0) {
         streak,
         last_login
       )
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_DATE)
+      VALUES($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE)
       RETURNING *
       `,
       [
-  username,
-  email,
-  hashedPassword,
-  "user",
-  "free",
-  referralCode,
-  referredById,
-  1
-]
+        username,
+        hashedPassword,
+        "user",
+        "free",
+        referralCode,
+        referredById,
+        1
+      ]
     );
 
     const user = result.rows[0];
@@ -121,8 +117,6 @@ if (exists.rows.length > 0) {
           5
         ]
       );
-
-      /* ---------------- UPDATE REFERRER POINTS ---------------- */
 
       await db.query(
         `
@@ -166,7 +160,7 @@ router.post("/login", async (req, res) => {
   try {
 
     const {
-      login,
+      username,
       password
     } = req.body;
 
@@ -175,9 +169,8 @@ router.post("/login", async (req, res) => {
       SELECT *
       FROM users
       WHERE username=$1
-      OR email=$1
       `,
-      [login]
+      [username]
     );
 
     const user = result.rows[0];
