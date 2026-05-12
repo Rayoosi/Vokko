@@ -4,7 +4,7 @@ function VipPage() {
 
     {
       name: "VIP 1",
-      price: "$7",
+      price: "$999",
       reward: "1 Point / Day",
       color: "from-cyan-400 to-blue-500"
     },
