@@ -6,38 +6,61 @@ function VipPage() {
   const [paymentData, setPaymentData] =
     useState(null);
 
-  const buyVip = async (plan) => {
+  const buyVip = (plan) => {
 
-    try {
+  setPaymentData({
 
-      const res =
-        await api.post(
+    walletAddress:
+      "YOUR_WALLET",
 
-          "/api/payment/create-checkout-session",
+    network:
+      "TRC20",
 
-          {
+    planName:
+      plan.name,
 
-            planName:
-              plan.name,
+    amount:
+      plan.price.replace("$", "")
 
-            amount:
-              plan.price.replace("$", "")
+  });
 
-          }
+};
 
-        );
+const confirmPayment = async () => {
 
-      setPaymentData(res.data);
+  try {
 
-    } catch (err) {
+    await api.post(
 
-      console.log(err);
+      "/api/payment/create-checkout-session",
 
-      alert("Payment request failed");
+      {
 
-    }
+        planName:
+          paymentData.planName,
 
-  };
+        amount:
+          paymentData.amount
+
+      }
+
+    );
+
+    alert(
+      "Payment request sent successfully"
+    );
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert(
+      "Failed to send payment request"
+    );
+
+  }
+
+};
 
   const plans = [
 
@@ -237,7 +260,7 @@ function VipPage() {
 
               <p className="text-yellow-400 font-bold text-lg">
 
-                Payment Request Created
+                Selected Plan
 
               </p>
 
@@ -261,7 +284,19 @@ function VipPage() {
 
             </div>
 
-            <button
+             <button
+
+  onClick={confirmPayment}
+
+  className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 py-4 rounded-2xl font-bold"
+
+>
+
+  I Have Paid ✅
+
+</button>
+             
+             <button
 
               onClick={() => setPaymentData(null)}
 
