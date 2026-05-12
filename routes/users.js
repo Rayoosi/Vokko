@@ -37,9 +37,10 @@ router.get(
         });
       }
 
-      res.json(
-        result.rows[0]
-      );
+      res.json({
+  user: result.rows[0],
+  points: result.rows[0].points
+});
 
     } catch (err) {
 
