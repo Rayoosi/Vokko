@@ -156,25 +156,65 @@ function WithdrawPage({
 
           </p>
 
-          <ul className="mt-3 text-slate-300 space-y-2 text-sm">
+          <ul className="mt-3 text-slate-300 space-y-4 text-sm">
 
-            <li>
-              • Minimum withdraw is 100 points
-            </li>
+  <li>
 
-            <li>
-              • 100 points = $10
-            </li>
+    <p>
+      • Minimum withdraw is 100 points
+    </p>
 
-            <li>
-              • You must invite 3 paid referrals
-            </li>
+    <p className="text-slate-500 text-xs mt-1">
 
-            <li>
-              • One referral must match your VIP level
-            </li>
+      الحد الأدنى للسحب هو 100 نقطة
 
-          </ul>
+    </p>
+
+  </li>
+
+  <li>
+
+    <p>
+      • 100 points = $10
+    </p>
+
+    <p className="text-slate-500 text-xs mt-1">
+
+      كل 100 نقطة تساوي 10 دولار
+
+    </p>
+
+  </li>
+
+  <li>
+
+    <p>
+      • You must invite 3 paid referrals
+    </p>
+
+    <p className="text-slate-500 text-xs mt-1">
+
+      يجب دعوة 3 أشخاص قاموا بتفعيل VIP
+
+    </p>
+
+  </li>
+
+  <li>
+
+    <p>
+      • One referral must match your VIP level
+    </p>
+
+    <p className="text-slate-500 text-xs mt-1">
+
+      يجب أن يكون أحد الإحالات بنفس مستوى VIP الخاص بك
+
+    </p>
+
+  </li>
+
+</ul>
 
         </div>
 
