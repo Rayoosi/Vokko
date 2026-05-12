@@ -18,9 +18,11 @@ router.use((req, res, next) => {
     return res.status(403).json({
       error: "Access denied"
     });
+
   }
 
   next();
+
 });
 
 /* ---------------- DASHBOARD STATS ---------------- */
@@ -105,7 +107,9 @@ router.get(
       res.status(500).json({
         error: err.message
       });
+
     }
+
   }
 );
 
@@ -146,7 +150,9 @@ router.get(
       res.status(500).json({
         error: err.message
       });
+
     }
+
   }
 );
 
@@ -179,6 +185,7 @@ router.put(
         return res.status(400).json({
           error: "Invalid status"
         });
+
       }
 
       /* ---------------- GET REQUEST ---------------- */
@@ -197,8 +204,6 @@ router.put(
       const request =
         requestResult.rows[0];
 
-      console.log(request);
-
       if (!request) {
 
         await client.query("ROLLBACK");
@@ -206,6 +211,7 @@ router.put(
         return res.status(404).json({
           error: "Request not found"
         });
+
       }
 
       /* ---------------- ONLY PENDING ---------------- */
@@ -220,6 +226,7 @@ router.put(
           error:
             "Request already processed"
         });
+
       }
 
       /* ---------------- UPDATE STATUS ---------------- */
@@ -260,9 +267,6 @@ router.put(
           ]
         );
 
-        console.log(
-          "✅ POINTS REFUNDED"
-        );
       }
 
       await client.query("COMMIT");
@@ -287,7 +291,53 @@ router.put(
     } finally {
 
       client.release();
+
     }
+
+  }
+);
+
+/* ---------------- GET PAYMENT REQUESTS ---------------- */
+
+router.get(
+  "/payments",
+  async (req, res) => {
+
+    try {
+
+      const payments =
+        await db.query(
+          `
+          SELECT
+            payment_requests.id,
+            payment_requests.user_id,
+            payment_requests.plan_name,
+            payment_requests.amount,
+            payment_requests.status,
+            payment_requests.created_at,
+            users.username
+          FROM payment_requests
+          JOIN users
+          ON users.id =
+          payment_requests.user_id
+          ORDER BY payment_requests.id DESC
+          `
+        );
+
+      res.json(
+        payments.rows
+      );
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
   }
 );
 
