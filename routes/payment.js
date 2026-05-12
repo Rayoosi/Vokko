@@ -1,49 +1,58 @@
-const router = require("express").Router();
+const router =
+  require("express").Router();
 
-const Stripe = require("stripe");
+const auth =
+  require("../middleware/auth");
 
-const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY
-);
+const db =
+  require("../config/db");
+
+/* ---------------- USDT PAYMENT ---------------- */
 
 router.post(
   "/create-checkout-session",
+  auth,
   async (req, res) => {
 
     try {
 
-      const session =
-        await stripe.checkout.sessions.create({
+      const {
+        planName,
+        amount
+      } = req.body;
 
-          payment_method_types: ["card"],
+      await db.query(
 
-          mode: "payment",
+        `
+        INSERT INTO payment_requests
+        (
+          user_id,
+          plan_name,
+          amount
+        )
+        VALUES ($1, $2, $3)
+        `,
 
-          line_items: [
-            {
-              price_data: {
-                currency: "usd",
-
-                product_data: {
-                  name: "VIP Plan"
-                },
-
-                unit_amount: 999
-              },
-
-              quantity: 1
-            }
-          ],
-
-          success_url:
-            `${process.env.CLIENT_URL}/success`,
-
-          cancel_url:
-            `${process.env.CLIENT_URL}/cancel`
-        });
+        [
+          req.user.id,
+          planName,
+          amount
+        ]
+      );
 
       res.json({
-        url: session.url
+
+        success: true,
+
+        walletAddress:
+          "TXXXXXXXXXXXXXXX",
+
+        network:
+          "TRC20",
+
+        message:
+          "Send USDT then wait for approval"
+
       });
 
     } catch (err) {
@@ -51,9 +60,11 @@ router.post(
       console.log(err);
 
       res.status(500).json({
-        error: "Stripe error"
+        error: "Server error"
       });
+
     }
+
   }
 );
 
