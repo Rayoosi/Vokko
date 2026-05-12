@@ -341,4 +341,93 @@ router.get(
   }
 );
 
+/* ---------------- APPROVE PAYMENT ---------------- */
+
+router.put(
+  "/payments/:id",
+  async (req, res) => {
+
+    try {
+
+      const { id } =
+        req.params;
+
+      const { status } =
+        req.body;
+
+      /* ---------------- GET PAYMENT ---------------- */
+
+      const paymentResult =
+        await db.query(
+          `
+          SELECT *
+          FROM payment_requests
+          WHERE id=$1
+          `,
+          [id]
+        );
+
+      const payment =
+        paymentResult.rows[0];
+
+      if (!payment) {
+
+        return res.status(404).json({
+          error: "Payment not found"
+        });
+
+      }
+
+      /* ---------------- UPDATE STATUS ---------------- */
+
+      await db.query(
+        `
+        UPDATE payment_requests
+        SET status=$1
+        WHERE id=$2
+        `,
+        [
+          status,
+          id
+        ]
+      );
+
+      /* ---------------- ACTIVATE VIP ---------------- */
+
+      if (
+        status === "approved"
+      ) {
+
+        await db.query(
+          `
+          UPDATE users
+          SET plan=$1
+          WHERE id=$2
+          `,
+          [
+            payment.plan_name,
+            payment.user_id
+          ]
+        );
+
+      }
+
+      res.json({
+        message:
+          "Payment updated"
+      });
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
+  }
+);
+
 module.exports = router;
