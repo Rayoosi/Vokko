@@ -2,28 +2,43 @@ import api from "../api";
 
 function VipPage() {
 
-  const buyVip = async () => {
+  const buyVip = async (plan) => {
 
-    try {
+  try {
 
-      const res =
-        await api.post(
-          "/api/payment/create-checkout-session"
-        );
+    const res =
+      await api.post(
 
-      if (res.data.url) {
+        "/api/payment/create-checkout-session",
 
-        window.location.href =
-          res.data.url;
-      }
+        {
 
-    } catch (err) {
+          planName:
+            plan.name,
 
-      console.log(err);
+          amount:
+            plan.price.replace("$", "")
 
-      alert("Payment error");
-    }
-  };
+        }
+
+      );
+
+    alert(
+      "Send USDT to wallet:\n\n" +
+      res.data.walletAddress +
+      "\n\nNetwork: " +
+      res.data.network
+    );
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Payment request failed");
+
+  }
+
+};
 
   const plans = [
 
@@ -151,13 +166,18 @@ function VipPage() {
             {/* BUTTON */}
 
             <button
-              onClick={buyVip}
-              className={`w-full mt-10 bg-gradient-to-r ${plan.color} hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl`}
-            >
 
-              Upgrade 🚀
+  onClick={() => {
+    console.log("BUTTON WORKS");
+    buyVip(plan);
+  }}
 
-            </button>
+  className={`w-full mt-10 bg-gradient-to-r ${plan.color} hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl`}
+>
+
+  Upgrade 🚀
+
+</button>
 
           </div>
 
