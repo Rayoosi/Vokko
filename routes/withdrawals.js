@@ -13,7 +13,9 @@ router.post("/", auth, async (req, res) => {
       wallet_address
     } = req.body;
 
-    const user = await db.query(
+    /* ---------------- USER ---------------- */
+
+    const userResult = await db.query(
       `
       SELECT plan
       FROM users
@@ -21,6 +23,90 @@ router.post("/", auth, async (req, res) => {
       `,
       [req.user.id]
     );
+
+    const user =
+      userResult.rows[0];
+
+    /* ---------------- REFERRALS ---------------- */
+
+    const refs =
+      await db.query(
+
+        `
+        SELECT plan
+        FROM users
+        WHERE referred_by=$1
+        `,
+
+        [req.user.id]
+
+      );
+
+    const referralPlans =
+      refs.rows.map(
+        r => r.plan
+      );
+
+    /* ---------------- VIP RULES ---------------- */
+
+    if (user.plan === "VIP 1") {
+
+      if (referralPlans.length < 3) {
+
+        return res.status(403).json({
+
+          error:
+            "VIP 1 requires 3 active referrals"
+
+        });
+
+      }
+
+    }
+
+    if (user.plan === "VIP 2") {
+
+      const hasVip2 =
+
+        referralPlans.includes(
+          "VIP 2"
+        );
+
+      if (!hasVip2) {
+
+        return res.status(403).json({
+
+          error:
+            "VIP 2 requires at least 1 VIP 2 referral"
+
+        });
+
+      }
+
+    }
+
+    if (user.plan === "VIP 3") {
+
+      const hasVip3 =
+
+        referralPlans.includes(
+          "VIP 3"
+        );
+
+      if (!hasVip3) {
+
+        return res.status(403).json({
+
+          error:
+            "VIP 3 requires at least 1 VIP 3 referral"
+
+        });
+
+      }
+
+    }
+
+    /* ---------------- POINTS ---------------- */
 
     const pointsData = await db.query(
       `
@@ -41,6 +127,7 @@ router.post("/", auth, async (req, res) => {
       return res.status(400).json({
         error: "Minimum withdraw is 100 points"
       });
+
     }
 
     /* ---------------- SAVE WITHDRAW ---------------- */
@@ -83,7 +170,9 @@ router.post("/", auth, async (req, res) => {
     res.status(500).json({
       error: err.message
     });
+
   }
+
 });
 
 /* ---------------- WITHDRAW HISTORY ---------------- */
@@ -109,7 +198,9 @@ router.get("/history", auth, async (req, res) => {
     res.status(500).json({
       error: err.message
     });
+
   }
+
 });
 
 module.exports = router;

@@ -49,8 +49,12 @@ function WithdrawPage({
         console.log(err);
 
         toast.error(
-          "Withdraw failed"
-        );
+
+  err.response?.data?.error ||
+
+  "Withdraw failed"
+
+);
       }
     };
 

@@ -11,7 +11,7 @@ function VipPage() {
   setPaymentData({
 
     walletAddress:
-      "YOUR_WALLET",
+      "TNr7k7aSxn7JmVxBZikwHe2yFgV2rWxMTf",
 
     network:
       "TRC20",
