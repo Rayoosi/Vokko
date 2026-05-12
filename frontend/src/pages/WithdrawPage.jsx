@@ -24,7 +24,7 @@ function WithdrawPage({
           localStorage.getItem("token");
 
         await api.post(
-          "/users/withdraw",
+  "/withdrawals",
           {
             amount,
             walletAddress
