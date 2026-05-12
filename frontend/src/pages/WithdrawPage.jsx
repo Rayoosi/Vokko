@@ -9,9 +9,6 @@ function WithdrawPage({
   api
 }) {
 
-  const [amount, setAmount] =
-    useState("");
-
   const [walletAddress, setWalletAddress] =
     useState("");
 
@@ -24,24 +21,27 @@ function WithdrawPage({
           localStorage.getItem("token");
 
         await api.post(
-  "/withdrawals",
+
+          "/withdrawals",
+
           {
-            amount,
-            walletAddress
+            wallet_address:
+              walletAddress
           },
+
           {
             headers: {
               Authorization:
                 `Bearer ${token}`
             }
           }
+
         );
 
         toast.success(
           "Withdraw request submitted 🚀"
         );
 
-        setAmount("");
         setWalletAddress("");
 
       } catch (err) {
@@ -50,12 +50,14 @@ function WithdrawPage({
 
         toast.error(
 
-  err.response?.data?.error ||
+          err.response?.data?.error ||
 
-  "Withdraw failed"
+          "Withdraw failed"
 
-);
+        );
+
       }
+
     };
 
   return (
@@ -116,37 +118,13 @@ function WithdrawPage({
 
         <p className="text-slate-400 mt-3 text-lg">
 
-          Enter your payout details below.
+          Your full balance will be withdrawn automatically.
 
         </p>
 
-        {/* AMOUNT */}
-
-        <div className="mt-8">
-
-          <p className="text-slate-400 text-sm">
-
-            Amount
-
-          </p>
-
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) =>
-              setAmount(
-                e.target.value
-              )
-            }
-            className="w-full mt-3 p-5 rounded-2xl bg-black/30 border border-white/10 outline-none text-white placeholder:text-slate-500 focus:border-cyan-400 transition"
-          />
-
-        </div>
-
         {/* WALLET */}
 
-        <div className="mt-6">
+        <div className="mt-8">
 
           <p className="text-slate-400 text-sm">
 
@@ -156,7 +134,7 @@ function WithdrawPage({
 
           <input
             type="text"
-            placeholder="Enter wallet address"
+            placeholder="Enter your USDT wallet"
             value={walletAddress}
             onChange={(e) =>
               setWalletAddress(
@@ -168,21 +146,55 @@ function WithdrawPage({
 
         </div>
 
+        {/* INFO BOX */}
+
+        <div className="mt-6 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-5">
+
+          <p className="text-yellow-400 font-bold text-lg">
+
+            Withdraw Rules
+
+          </p>
+
+          <ul className="mt-3 text-slate-300 space-y-2 text-sm">
+
+            <li>
+              • Minimum withdraw is 100 points
+            </li>
+
+            <li>
+              • 100 points = $10
+            </li>
+
+            <li>
+              • You must invite 3 paid referrals
+            </li>
+
+            <li>
+              • One referral must match your VIP level
+            </li>
+
+          </ul>
+
+        </div>
+
         {/* BUTTON */}
 
         <button
           onClick={submitWithdraw}
-          className="mt-10 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold px-10 py-5 rounded-2xl text-lg shadow-2xl"
+          className="w-full mt-8 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-5 rounded-2xl text-lg shadow-2xl"
         >
 
-          Submit Request 🚀
+          Submit Withdraw Request 🚀
 
         </button>
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default WithdrawPage;
