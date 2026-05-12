@@ -43,6 +43,10 @@ app.use("/tasks", require("./routes/tasks"));
 app.use("/admin", require("./routes/admin"));
 app.use("/missions", require("./routes/missions"));
 app.use("/api/payment", paymentRoutes);
+app.use(
+  "/withdrawals",
+  require("./routes/withdraw")
+);
 
 /* ---------------- HOME ---------------- */
 
