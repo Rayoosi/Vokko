@@ -93,15 +93,85 @@ function AdminPayments() {
 
                 </p>
 
-              </div>
+                <p className="text-slate-500 mt-2 text-sm">
 
-              <div>
-
-                <span className="bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-2xl font-bold">
-
+                  Status:
+                  {" "}
                   {payment.status}
 
-                </span>
+                </p>
+
+              </div>
+
+              <div className="flex gap-3">
+
+                <button
+
+                  onClick={async () => {
+
+                    try {
+
+                      await api.put(
+
+                        `/admin/payments/${payment.id}`,
+
+                        {
+                          status: "approved"
+                        }
+
+                      );
+
+                      fetchPayments();
+
+                    } catch (err) {
+
+                      console.log(err);
+
+                    }
+
+                  }}
+
+                  className="bg-green-500/20 hover:bg-green-500/30 text-green-400 px-4 py-2 rounded-2xl font-bold transition"
+
+                >
+
+                  Approve ✅
+
+                </button>
+
+                <button
+
+                  onClick={async () => {
+
+                    try {
+
+                      await api.put(
+
+                        `/admin/payments/${payment.id}`,
+
+                        {
+                          status: "rejected"
+                        }
+
+                      );
+
+                      fetchPayments();
+
+                    } catch (err) {
+
+                      console.log(err);
+
+                    }
+
+                  }}
+
+                  className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-2xl font-bold transition"
+
+                >
+
+                  Reject ❌
+
+                </button>
 
               </div>
 
