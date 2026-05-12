@@ -214,8 +214,6 @@ function App() {
         "Login successful 🚀"
       );
 
-      window.location.href =
-        "/";
 
     } catch (err) {
 
