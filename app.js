@@ -45,7 +45,7 @@ app.use("/missions", require("./routes/missions"));
 app.use("/api/payment", paymentRoutes);
 app.use(
   "/withdrawals",
-  require("./routes/withdraw")
+  require("./routes/withdrawals")
 );
 
 /* ---------------- HOME ---------------- */
