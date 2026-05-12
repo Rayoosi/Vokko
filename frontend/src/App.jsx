@@ -6,7 +6,7 @@ import {
 import {
   BrowserRouter,
   Routes,
- Route
+  Route
 } from "react-router-dom";
 
 import {
@@ -30,6 +30,7 @@ import WithdrawPage from "./pages/WithdrawPage";
 import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
 import PaymentPage from "./pages/PaymentPage";
+import AdminPayments from "./pages/AdminPayments";
 
 function App() {
 
@@ -52,44 +53,24 @@ function App() {
     const autoLogin =
       async () => {
 
-      try {
-
-        const token =
-          localStorage.getItem(
-            "token"
-          );
-
-        if (!token) {
-
-          setLoading(false);
-
-          return;
-        }
-
-        const userRes =
-          await api.get(
-            "/users/me",
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`
-              }
-            }
-          );
-
-        setUser(
-          userRes.data.user
-        );
-
-        setPoints(
-          userRes.data.points
-        );
-
         try {
 
-          const missionRes =
+          const token =
+            localStorage.getItem(
+              "token"
+            );
+
+          if (!token) {
+
+            setLoading(false);
+
+            return;
+
+          }
+
+          const userRes =
             await api.get(
-              "/missions/daily",
+              "/users/me",
               {
                 headers: {
                   Authorization:
@@ -98,30 +79,56 @@ function App() {
               }
             );
 
-          setMission(
-            missionRes.data
+          console.log(userRes.data);
+
+          setUser(
+            userRes.data.user
           );
+
+          setPoints(
+            userRes.data.points
+          );
+
+          try {
+
+            const missionRes =
+              await api.get(
+                "/missions/daily",
+                {
+                  headers: {
+                    Authorization:
+                      `Bearer ${token}`
+                  }
+                }
+              );
+
+            setMission(
+              missionRes.data
+            );
+
+          } catch (err) {
+
+            console.log(
+              "Mission load failed"
+            );
+
+          }
 
         } catch (err) {
 
-          console.log(
-            "Mission load failed"
+          console.log(err);
+
+          localStorage.removeItem(
+            "token"
           );
+
+        } finally {
+
+          setLoading(false);
+
         }
 
-      } catch (err) {
-
-        console.log(err);
-
-        localStorage.removeItem(
-          "token"
-        );
-
-      } finally {
-
-        setLoading(false);
-      }
-    };
+      };
 
     autoLogin();
 
@@ -160,6 +167,7 @@ function App() {
         );
 
         return;
+
       }
 
       localStorage.setItem(
@@ -177,6 +185,8 @@ function App() {
             }
           }
         );
+
+      console.log(userRes.data);
 
       setUser(
         userRes.data.user
@@ -208,12 +218,12 @@ function App() {
         console.log(
           "Mission load failed"
         );
+
       }
 
       toast.success(
         "Login successful 🚀"
       );
-
 
     } catch (err) {
 
@@ -228,7 +238,9 @@ function App() {
         err.response?.data?.error ||
         "Login failed"
       );
+
     }
+
   };
 
   /* ---------------- LOADING ---------------- */
@@ -266,7 +278,9 @@ function App() {
         </div>
 
       </div>
+
     );
+
   }
 
   return (
@@ -415,6 +429,13 @@ function App() {
                 }
               />
 
+              <Route
+                path="/admin/payments"
+                element={
+                  <AdminPayments />
+                }
+              />
+
             </Routes>
 
           </div>
@@ -424,7 +445,9 @@ function App() {
       )}
 
     </BrowserRouter>
+
   );
+
 }
 
 export default App;
