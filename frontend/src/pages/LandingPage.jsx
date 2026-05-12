@@ -7,32 +7,13 @@ export default function LandingPage({
 
   /* ---------------- VIP PURCHASE ---------------- */
 
-  const buyVip = async (plan) => {
+  const buyVip = async () => {
 
     try {
 
-      const token =
-        localStorage.getItem("token");
-
-      if (!token) {
-
-        alert("Please login first");
-
-        return;
-      }
-
       const res =
         await api.post(
-          "/billing/create-checkout",
-          {
-            plan
-          },
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
-            }
-          }
+          "/api/payment/create-checkout-session"
         );
 
       if (res.data.url) {
@@ -333,16 +314,14 @@ export default function LandingPage({
                 </div>
 
                 <button
-                  type="button"
-                  onClick={() =>
-                    buyVip(plan.name)
-                  }
-                  className="w-full mt-10 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg cursor-pointer"
+                 type="button"
+                 onClick={buyVip}
+                 className="w-full mt-10 bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg cursor-pointer"
                 >
 
-                  Upgrade 🚀
+             Upgrade 🚀
 
-                </button>
+</button>
 
               </div>
 

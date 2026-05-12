@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const paymentRoutes =
+require("./routes/payment");
 
 const app = express();
 
@@ -40,6 +42,7 @@ app.use("/users", require("./routes/users"));
 app.use("/tasks", require("./routes/tasks"));
 app.use("/admin", require("./routes/admin"));
 app.use("/missions", require("./routes/missions"));
+app.use("/api/payment", paymentRoutes);
 
 /* ---------------- HOME ---------------- */
 
