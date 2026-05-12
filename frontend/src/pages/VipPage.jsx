@@ -1,4 +1,29 @@
+import api from "../api";
+
 function VipPage() {
+
+  const buyVip = async () => {
+
+    try {
+
+      const res =
+        await api.post(
+          "/api/payment/create-checkout-session"
+        );
+
+      if (res.data.url) {
+
+        window.location.href =
+          res.data.url;
+      }
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert("Payment error");
+    }
+  };
 
   const plans = [
 
@@ -126,6 +151,7 @@ function VipPage() {
             {/* BUTTON */}
 
             <button
+              onClick={buyVip}
               className={`w-full mt-10 bg-gradient-to-r ${plan.color} hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl`}
             >
 
