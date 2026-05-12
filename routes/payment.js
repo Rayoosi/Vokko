@@ -42,18 +42,21 @@ router.post(
 
       res.json({
 
-        success: true,
+  success: true,
 
-        walletAddress:
-          "TNr7k7aSxn7JmVxBZikwHe2yFgV2rWxMTf",
+  walletAddress:
+    "YOUR_WALLET",
 
-        network:
-          "TRC20",
+  network:
+    "TRC20",
 
-        message:
-          "Send USDT then wait for approval"
+  planName:
+    planName,
 
-      });
+  message:
+    "Send USDT then wait for approval"
+
+});
 
     } catch (err) {
 
