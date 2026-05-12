@@ -4,40 +4,40 @@ import api from "../api";
 function VipPage() {
 
   const [paymentData, setPaymentData] =
-  useState(null);
+    useState(null);
 
   const buyVip = async (plan) => {
 
-  try {
+    try {
 
-    const res =
-      await api.post(
+      const res =
+        await api.post(
 
-        "/api/payment/create-checkout-session",
+          "/api/payment/create-checkout-session",
 
-        {
+          {
 
-          planName:
-            plan.name,
+            planName:
+              plan.name,
 
-          amount:
-            plan.price.replace("$", "")
+            amount:
+              plan.price.replace("$", "")
 
-        }
+          }
 
-      );
+        );
 
-        setPaymentData(res.data);
+      setPaymentData(res.data);
 
-  } catch (err) {
+    } catch (err) {
 
-    console.log(err);
+      console.log(err);
 
-    alert("Payment request failed");
+      alert("Payment request failed");
 
-  }
+    }
 
-};
+  };
 
   const plans = [
 
@@ -166,17 +166,17 @@ function VipPage() {
 
             <button
 
-  onClick={() => {
-    console.log("BUTTON WORKS");
-    buyVip(plan);
-  }}
+              onClick={() => {
+                console.log("BUTTON WORKS");
+                buyVip(plan);
+              }}
 
-  className={`w-full mt-10 bg-gradient-to-r ${plan.color} hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl`}
->
+              className={`w-full mt-10 bg-gradient-to-r ${plan.color} hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl`}
+            >
 
-  Upgrade 🚀
+              Upgrade 🚀
 
-</button>
+            </button>
 
           </div>
 
@@ -184,71 +184,102 @@ function VipPage() {
 
       </div>
 
-     {paymentData && (
+      {/* PAYMENT MODAL */}
 
-  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      {paymentData && (
 
-    <div className="bg-[#0f172a] border border-cyan-500/20 rounded-3xl p-8 w-[90%] max-w-md text-center">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-      <h2 className="text-3xl font-black text-white">
+          <div className="bg-[#0f172a] border border-cyan-500/20 rounded-3xl p-8 w-[90%] max-w-md text-center">
 
-        USDT Payment
+            <h2 className="text-3xl font-black text-white">
 
-      </h2>
+              USDT Payment
 
-      <p className="text-slate-400 mt-4">
+            </h2>
 
-        Send exact amount to this wallet
+            <p className="text-slate-400 mt-4">
 
-      </p>
+              Send exact amount to this wallet
 
-      <div className="mt-6 bg-black/40 rounded-2xl p-4 break-all text-cyan-400 font-bold">
+            </p>
 
-        {paymentData.walletAddress}
+            <div className="mt-6 bg-black/40 rounded-2xl p-4 break-all text-cyan-400 font-bold">
 
-      </div>
+              {paymentData.walletAddress}
 
-      <button
+            </div>
 
-        onClick={() => {
+            <button
 
-          navigator.clipboard.writeText(
-            paymentData.walletAddress
-          );
+              onClick={() => {
 
-        }}
+                navigator.clipboard.writeText(
+                  paymentData.walletAddress
+                );
 
-        className="mt-4 bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-2xl"
-      >
+              }}
 
-        Copy Wallet
+              className="mt-4 bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-2xl"
+            >
 
-      </button>
+              Copy Wallet
 
-      <div className="mt-6 text-green-400 font-bold">
+            </button>
 
-        Network: {paymentData.network}
+            <div className="mt-6 text-green-400 font-bold">
 
-      </div>
+              Network: {paymentData.network}
 
-      <button
+            </div>
 
-        onClick={() => setPaymentData(null)}
+            <div className="mt-6 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-4">
 
-        className="w-full mt-8 bg-gradient-to-r from-purple-500 to-pink-500 py-4 rounded-2xl font-bold"
+              <p className="text-yellow-400 font-bold text-lg">
 
-      >
+                Payment Request Created
 
-        Close
+              </p>
 
-      </button>
+              <p className="text-slate-300 mt-2">
+
+                Your request for:
+
+              </p>
+
+              <p className="text-white font-black text-2xl mt-2">
+
+                {paymentData.planName}
+
+              </p>
+
+              <p className="text-slate-400 mt-3 text-sm">
+
+                Status: Pending Approval
+
+              </p>
+
+            </div>
+
+            <button
+
+              onClick={() => setPaymentData(null)}
+
+              className="w-full mt-8 bg-gradient-to-r from-purple-500 to-pink-500 py-4 rounded-2xl font-bold"
+
+            >
+
+              Close
+
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
-
-  </div>
-
-)}
-     </div>
   );
 }
 
