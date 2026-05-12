@@ -1,6 +1,10 @@
+import { useState } from "react";
 import api from "../api";
 
 function VipPage() {
+
+  const [paymentData, setPaymentData] =
+  useState(null);
 
   const buyVip = async (plan) => {
 
@@ -23,12 +27,7 @@ function VipPage() {
 
       );
 
-    alert(
-      "Send USDT to wallet:\n\n" +
-      res.data.walletAddress +
-      "\n\nNetwork: " +
-      res.data.network
-    );
+        setPaymentData(res.data);
 
   } catch (err) {
 
@@ -185,7 +184,71 @@ function VipPage() {
 
       </div>
 
+     {paymentData && (
+
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+    <div className="bg-[#0f172a] border border-cyan-500/20 rounded-3xl p-8 w-[90%] max-w-md text-center">
+
+      <h2 className="text-3xl font-black text-white">
+
+        USDT Payment
+
+      </h2>
+
+      <p className="text-slate-400 mt-4">
+
+        Send exact amount to this wallet
+
+      </p>
+
+      <div className="mt-6 bg-black/40 rounded-2xl p-4 break-all text-cyan-400 font-bold">
+
+        {paymentData.walletAddress}
+
+      </div>
+
+      <button
+
+        onClick={() => {
+
+          navigator.clipboard.writeText(
+            paymentData.walletAddress
+          );
+
+        }}
+
+        className="mt-4 bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-2xl"
+      >
+
+        Copy Wallet
+
+      </button>
+
+      <div className="mt-6 text-green-400 font-bold">
+
+        Network: {paymentData.network}
+
+      </div>
+
+      <button
+
+        onClick={() => setPaymentData(null)}
+
+        className="w-full mt-8 bg-gradient-to-r from-purple-500 to-pink-500 py-4 rounded-2xl font-bold"
+
+      >
+
+        Close
+
+      </button>
+
     </div>
+
+  </div>
+
+)}
+     </div>
   );
 }
 
