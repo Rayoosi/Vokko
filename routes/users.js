@@ -19,6 +19,7 @@ router.get(
             id,
             username,
             points,
+            role,
             plan,
             streak,
             referral_code
@@ -35,12 +36,18 @@ router.get(
         return res.status(404).json({
           error: "User not found"
         });
+
       }
 
       res.json({
-  user: result.rows[0],
-  points: result.rows[0].points
-});
+
+        user:
+          result.rows[0],
+
+        points:
+          result.rows[0].points
+
+      });
 
     } catch (err) {
 
