@@ -100,28 +100,7 @@ router.post("/watch-ad", auth, async (req, res) => {
 
       completed = true;
 
-      const userResult =
-  await db.query(
-    `
-    SELECT vip_level
-    FROM users
-    WHERE id = $1
-    `,
-    [req.user.id]
-  );
-
-const user =
-  userResult.rows[0];
-
-if (user.vip_level === 0) {
-
-  reward = 0.5;
-
-} else {
-
-  reward = 3;
-
-}
+      reward = 3;
 
       await db.query(
         `
