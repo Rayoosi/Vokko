@@ -78,9 +78,11 @@ function AdminPayments() {
             className="bg-white/5 border border-white/10 rounded-3xl p-6"
           >
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-6">
 
-              <div>
+              {/* LEFT */}
+
+              <div className="flex-1">
 
                 <h2 className="text-2xl font-black">
 
@@ -88,33 +90,70 @@ function AdminPayments() {
 
                 </h2>
 
-                <p className="text-slate-400 mt-2">
+                <p className="text-slate-400 mt-3">
 
                   Plan:
                   {" "}
-                  {payment.plan_name}
+                  <span className="text-cyan-400 font-bold">
+
+                    {payment.plan_name}
+
+                  </span>
 
                 </p>
 
-                <p className="text-slate-400">
+                <p className="text-slate-400 mt-2">
 
                   Amount:
                   {" "}
-                  ${payment.amount}
+                  <span className="text-green-400 font-bold">
+
+                    ${payment.amount}
+
+                  </span>
 
                 </p>
 
-                <p className="text-slate-500 mt-2 text-sm">
+                {/* TXID */}
 
-                  Status:
+                <p className="text-slate-400 mt-3 break-all">
+
+                  TXID:
                   {" "}
-                  {payment.status}
+
+                  <span className="text-cyan-400 text-sm">
+
+                    {payment.txid || "No TXID"}
+
+                  </span>
+
+                </p>
+
+                {/* STATUS */}
+
+                <p className="mt-4">
+
+                  <span className={`px-4 py-2 rounded-2xl text-sm font-bold ${
+                    payment.status ===
+                    "approved"
+                      ? "bg-green-500/20 text-green-400"
+                      : payment.status ===
+                        "rejected"
+                      ? "bg-red-500/20 text-red-400"
+                      : "bg-yellow-500/20 text-yellow-400"
+                  }`}>
+
+                    {payment.status}
+
+                  </span>
 
                 </p>
 
               </div>
 
-              <div className="flex gap-3">
+              {/* BUTTONS */}
+
+              <div className="flex flex-col gap-3">
 
                 {/* APPROVE */}
 
@@ -162,7 +201,7 @@ function AdminPayments() {
 
                   }}
 
-                  className={`px-4 py-2 rounded-2xl font-bold transition ${
+                  className={`px-5 py-3 rounded-2xl font-bold transition ${
                     payment.status ===
                     "pending"
                       ? "bg-green-500/20 hover:bg-green-500/30 text-green-400"
@@ -221,7 +260,7 @@ function AdminPayments() {
 
                   }}
 
-                  className={`px-4 py-2 rounded-2xl font-bold transition ${
+                  className={`px-5 py-3 rounded-2xl font-bold transition ${
                     payment.status ===
                     "pending"
                       ? "bg-red-500/20 hover:bg-red-500/30 text-red-400"
