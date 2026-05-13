@@ -410,6 +410,109 @@ router.put(
           ]
         );
 
+        /* ---------------- GET USER ---------------- */
+
+        const userResult =
+          await db.query(
+            `
+            SELECT *
+            FROM users
+            WHERE id=$1
+            `,
+            [payment.user_id]
+          );
+
+        const user =
+          userResult.rows[0];
+
+        /* ---------------- REFERRAL BONUS ---------------- */
+
+        if (
+          user.referred_by
+        ) {
+
+          const referrerResult =
+            await db.query(
+              `
+              SELECT *
+              FROM users
+              WHERE referral_code=$1
+              `,
+              [
+                user.referred_by
+              ]
+            );
+
+          const referrer =
+            referrerResult.rows[0];
+
+          if (referrer) {
+
+            let reward = 0;
+
+            /* ---------------- VIP REWARDS ---------------- */
+
+            if (
+              payment.plan_name === "VIP 1"
+            ) {
+
+              reward = 25;
+
+            }
+
+            if (
+              payment.plan_name === "VIP 2"
+            ) {
+
+              reward = 60;
+
+            }
+
+            if (
+              payment.plan_name === "VIP 3"
+            ) {
+
+              reward = 150;
+
+            }
+
+            if (
+              payment.plan_name === "VIP 4"
+            ) {
+
+              reward = 350;
+
+            }
+
+            if (
+              payment.plan_name === "VIP 5"
+            ) {
+
+              reward = 700;
+
+            }
+
+            /* ---------------- ADD POINTS ---------------- */
+
+            await db.query(
+              `
+              INSERT INTO points_transactions
+              (
+                user_id,
+                amount
+              )
+              VALUES($1, $2)
+              `,
+              [
+                referrer.id,
+                reward
+              ]
+            );
+
+          }
+
+        }
+
       }
 
       res.json({
@@ -430,4 +533,4 @@ router.put(
   }
 );
 
-module.exports = router;
+module.exports = router;;
