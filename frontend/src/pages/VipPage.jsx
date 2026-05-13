@@ -86,29 +86,29 @@ function VipPage() {
 
     {
       name: "VIP 1",
-      price: "$999",
-      reward: "1 Point / Day",
+      price: "$30",
+      reward: "4 Point / Day",
       color: "from-cyan-400 to-blue-500"
     },
 
     {
       name: "VIP 2",
-      price: "$15",
-      reward: "2.5 Points / Day",
+      price: "$75",
+      reward: "10 Points / Day",
       color: "from-purple-400 to-pink-500"
     },
 
     {
       name: "VIP 3",
-      price: "$30",
-      reward: "4.9 Points / Day",
+      price: "$150",
+      reward: "22 Points / Day",
       color: "from-yellow-400 to-orange-500"
     },
 
     {
       name: "VIP 4",
-      price: "$50",
-      reward: "8.2 Points / Day",
+      price: "$300",
+      reward: "50 Points / Day",
       color: "from-green-400 to-emerald-500"
     }
 

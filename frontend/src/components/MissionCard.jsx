@@ -160,14 +160,15 @@ function MissionCard({
   /* ---------------- REWARDS ---------------- */
 
   const rewards = {
-    free: "+3",
-    starter: "+5",
-    pro: "+8",
-    elite: "+12"
-  };
+  0: 0.5,
+  1: 4,
+  2: 10,
+  3: 22,
+  4: 50
+};
 
-  const rewardDisplay =
-    rewards[user?.plan] || "+3";
+const rewardDisplay =
+  rewards[user?.vip_level] || 0.5;
 
   return (
 
@@ -267,7 +268,7 @@ function MissionCard({
 
           <h2 className="text-4xl font-black text-green-400 mt-3">
 
-            {rewardDisplay}
+            +{rewardDisplay} Points
 
           </h2>
 
@@ -394,7 +395,7 @@ function MissionCard({
 
             <p className="text-slate-400 mt-3 text-lg">
 
-              Claim your free daily reward every 24 hours.
+              Watch 7 ads daily to unlock your reward.
 
             </p>
 
@@ -402,7 +403,7 @@ function MissionCard({
 
           <div className="bg-green-500/20 border border-green-400/20 text-green-400 px-5 py-3 rounded-2xl font-bold">
 
-            +5 Points
+            +{rewardDisplay} Points
 
           </div>
 
