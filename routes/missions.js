@@ -96,41 +96,11 @@ router.post("/watch-ad", auth, async (req, res) => {
 
     let reward = 0;
 
-    /* ---------------- COMPLETE MISSION ---------------- */
-
     if (newCount >= 7) {
 
       completed = true;
 
-      /* ---------------- USER VIP LEVEL ---------------- */
-
-      const userResult =
-        await db.query(
-          `
-          SELECT vip_level
-          FROM users
-          WHERE id = $1
-          `,
-          [req.user.id]
-        );
-
-      const user =
-        userResult.rows[0];
-
-      /* ---------------- REWARDS ---------------- */
-
-      const rewards = {
-        0: 0.5,
-        1: 4,
-        2: 10,
-        3: 22,
-        4: 50
-      };
-
-      reward =
-        rewards[user.vip_level] || 0.5;
-
-      /* ---------------- ADD POINTS ---------------- */
+      reward = 3;
 
       await db.query(
         `
@@ -143,8 +113,6 @@ router.post("/watch-ad", auth, async (req, res) => {
           req.user.id
         ]
       );
-
-      /* ---------------- SAVE TRANSACTION ---------------- */
 
       await db.query(
         `
@@ -163,8 +131,6 @@ router.post("/watch-ad", auth, async (req, res) => {
         ]
       );
     }
-
-    /* ---------------- UPDATE MISSION ---------------- */
 
     await db.query(
       `
@@ -199,5 +165,123 @@ router.post("/watch-ad", auth, async (req, res) => {
     });
   }
 });
+
+/* ---------------- DAILY CLAIM ---------------- */
+
+router.post(
+  "/daily-claim",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const userId =
+        req.user.id;
+
+      const userResult =
+        await db.query(
+          `
+          SELECT *
+          FROM users
+          WHERE id = $1
+          `,
+          [userId]
+        );
+
+      if (
+        userResult.rows.length === 0
+      ) {
+
+        return res.status(404).json({
+          error:
+            "User not found"
+        });
+      }
+
+      const user =
+        userResult.rows[0];
+
+      /* ---------------- ALREADY CLAIMED ---------------- */
+
+      if (user.last_daily_claim) {
+
+        const claimDate =
+          new Date(
+            user.last_daily_claim
+          )
+          .toISOString()
+          .split("T")[0];
+
+        const today =
+          new Date()
+          .toISOString()
+          .split("T")[0];
+
+        if (claimDate === today) {
+
+          return res.status(400)
+            .json({
+              message:
+                "Reward already claimed today"
+            });
+        }
+      }
+
+      /* ---------------- ADD POINTS ---------------- */
+
+      await db.query(
+        `
+        UPDATE users
+        SET
+          points = points + 5,
+          last_daily_claim = CURRENT_DATE
+        WHERE id = $1
+        `,
+        [userId]
+      );
+
+      /* ---------------- SAVE TRANSACTION ---------------- */
+
+      await db.query(
+        `
+        INSERT INTO points_transactions
+        (
+          user_id,
+          amount,
+          type
+        )
+        VALUES($1, $2, $3)
+        `,
+        [
+          userId,
+          5,
+          "daily_reward"
+        ]
+      );
+
+      res.json({
+        success: true,
+        reward: 5
+      });
+
+    } catch (err) {
+
+      console.log(
+        "DAILY CLAIM ERROR FULL:"
+      );
+
+      console.log(err);
+
+      console.log(err.message);
+
+      console.log(err.stack);
+
+      return res.status(500).json({
+        error: err.message,
+        stack: err.stack
+      });
+    }
+  }
+);
 
 module.exports = router;
