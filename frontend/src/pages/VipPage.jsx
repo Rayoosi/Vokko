@@ -289,20 +289,24 @@ function VipPage() {
 
             {/* ARABIC HELP */}
 
-            <p className="text-slate-400 text-sm mt-3 leading-relaxed">
+            <p className="text-slate-400 text-sm mt-3 leading-relaxed text-right">
 
-              بعد إرسال USDT قم بنسخ
-              Transaction Hash (TXID)
-              من Binance أو المحفظة الخاصة بك
-              ثم ضعه هنا لإثبات عملية الدفع.
+  بعد إرسال عملة USDT
+  قم بنسخ رقم العملية
+  <span className="text-cyan-400 font-semibold">
+    {" "}TXID{" "}
+  </span>
 
-            </p>
+  من Binance أو من المحفظة الخاصة بك
+  ثم ضعه هنا لإثبات عملية الدفع.
 
-            <p className="text-yellow-400 text-sm mt-3 leading-relaxed font-semibold">
+</p>
 
-              ⚠️ لن يتم قبول أي طلب بدون TXID صحيح.
+            <p className="text-yellow-400 text-sm mt-3 leading-relaxed font-semibold text-right">
 
-            </p>
+  ⚠️ لن يتم قبول أي طلب بدون TXID صحيح.
+
+</p>
 
             <div className="mt-6 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-4">
 
