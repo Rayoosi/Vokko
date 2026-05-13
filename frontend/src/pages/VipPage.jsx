@@ -6,61 +6,81 @@ function VipPage() {
   const [paymentData, setPaymentData] =
     useState(null);
 
+  const [txid, setTxid] =
+    useState("");
+
   const buyVip = (plan) => {
 
-  setPaymentData({
+    setPaymentData({
 
-    walletAddress:
-      "TNr7k7aSxn7JmVxBZikwHe2yFgV2rWxMTf",
+      walletAddress:
+        "TNr7k7aSxn7JmVxBZikwHe2yFgV2rWxMTf",
 
-    network:
-      "TRC20",
+      network:
+        "TRC20",
 
-    planName:
-      plan.name,
+      planName:
+        plan.name,
 
-    amount:
-      plan.price.replace("$", "")
+      amount:
+        plan.price.replace("$", "")
 
-  });
+    });
 
-};
+  };
 
-const confirmPayment = async () => {
+  const confirmPayment = async () => {
 
-  try {
+    if (!txid) {
 
-    await api.post(
+      alert(
+        "Please enter transaction hash"
+      );
 
-      "/api/payment/create-checkout-session",
+      return;
 
-      {
+    }
 
-        planName:
-          paymentData.planName,
+    try {
 
-        amount:
-          paymentData.amount
+      await api.post(
 
-      }
+        "/api/payment/create-checkout-session",
 
-    );
+        {
 
-    alert(
-      "Payment request sent successfully"
-    );
+          planName:
+            paymentData.planName,
 
-  } catch (err) {
+          amount:
+            paymentData.amount,
 
-    console.log(err);
+          txid:
+            txid
 
-    alert(
-      "Failed to send payment request"
-    );
+        }
 
-  }
+      );
 
-};
+      alert(
+        "Payment request sent successfully"
+      );
+
+      setPaymentData(null);
+
+      setTxid("");
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert(
+        "Failed to send payment request"
+      );
+
+    }
+
+  };
 
   const plans = [
 
@@ -190,7 +210,6 @@ const confirmPayment = async () => {
             <button
 
               onClick={() => {
-                console.log("BUTTON WORKS");
                 buyVip(plan);
               }}
 
@@ -256,6 +275,18 @@ const confirmPayment = async () => {
 
             </div>
 
+            {/* TXID INPUT */}
+
+            <input
+              type="text"
+              placeholder="Enter Transaction Hash (TXID)"
+              value={txid}
+              onChange={(e) =>
+                setTxid(e.target.value)
+              }
+              className="w-full mt-6 bg-black/30 border border-white/10 rounded-2xl px-4 py-4 text-white outline-none"
+            />
+
             <div className="mt-6 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-4">
 
               <p className="text-yellow-400 font-bold text-lg">
@@ -284,21 +315,26 @@ const confirmPayment = async () => {
 
             </div>
 
-             <button
+            <button
 
-  onClick={confirmPayment}
+              onClick={confirmPayment}
 
-  className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 py-4 rounded-2xl font-bold"
+              className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 py-4 rounded-2xl font-bold"
 
->
+            >
 
-  I Have Paid ✅
+              I Have Paid ✅
 
-</button>
-             
-             <button
+            </button>
 
-              onClick={() => setPaymentData(null)}
+            <button
+
+              onClick={() => {
+
+                setPaymentData(null);
+                setTxid("");
+
+              }}
 
               className="w-full mt-8 bg-gradient-to-r from-purple-500 to-pink-500 py-4 rounded-2xl font-bold"
 

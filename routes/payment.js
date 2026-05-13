@@ -18,7 +18,8 @@ router.post(
 
       const {
         planName,
-        amount
+        amount,
+        txid
       } = req.body;
 
       await db.query(
@@ -28,35 +29,37 @@ router.post(
         (
           user_id,
           plan_name,
-          amount
+          amount,
+          txid
         )
-        VALUES ($1, $2, $3)
+        VALUES ($1, $2, $3, $4)
         `,
 
         [
           req.user.id,
           planName,
-          amount
+          amount,
+          txid
         ]
       );
 
       res.json({
 
-  success: true,
+        success: true,
 
-  walletAddress:
-    "YOUR_WALLET",
+        walletAddress:
+          "YOUR_WALLET",
 
-  network:
-    "TRC20",
+        network:
+          "TRC20",
 
-  planName:
-    planName,
+        planName:
+          planName,
 
-  message:
-    "Send USDT then wait for approval"
+        message:
+          "Send USDT then wait for approval"
 
-});
+      });
 
     } catch (err) {
 
