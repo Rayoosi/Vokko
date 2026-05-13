@@ -313,6 +313,7 @@ router.get(
             payment_requests.user_id,
             payment_requests.plan_name,
             payment_requests.amount,
+            payment_requests.txid,
             payment_requests.status,
             payment_requests.created_at,
             users.username
