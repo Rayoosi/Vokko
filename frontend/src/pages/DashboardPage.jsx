@@ -88,7 +88,7 @@ function DashboardPage({
 
             <div className="mt-8 bg-gradient-to-r from-cyan-400 to-purple-500 text-white px-5 py-3 rounded-2xl font-bold text-center shadow-xl">
 
-              {user?.vip_level || "FREE"}
+              {user?.plan || "FREE"}
 
             </div>
 
@@ -114,7 +114,7 @@ function DashboardPage({
 
           <h2 className="text-4xl font-black text-yellow-400 mt-4">
 
-            {user?.vip_level || "FREE"}
+            {user?.plan || "FREE"}
 
           </h2>
 
