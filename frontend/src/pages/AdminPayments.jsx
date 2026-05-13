@@ -21,10 +21,21 @@ function AdminPayments() {
 
       try {
 
-        const res =
-          await api.get(
-            "/admin/payments"
-          );
+        const token =
+  localStorage.getItem(
+    "token"
+  );
+
+const res =
+  await api.get(
+    "/admin/payments",
+    {
+      headers: {
+        Authorization:
+          `Bearer ${token}`
+      }
+    }
+  );
 
         setPayments(
           res.data
@@ -111,15 +122,27 @@ function AdminPayments() {
 
                     try {
 
-                      await api.put(
+                      const token =
+  localStorage.getItem(
+    "token"
+  );
 
-                        `/admin/payments/${payment.id}`,
+await api.put(
 
-                        {
-                          status: "approved"
-                        }
+  `/admin/payments/${payment.id}`,
 
-                      );
+  {
+    status: "approved"
+  },
+
+  {
+    headers: {
+      Authorization:
+        `Bearer ${token}`
+    }
+  }
+
+);
 
                       fetchPayments();
 
@@ -145,15 +168,27 @@ function AdminPayments() {
 
                     try {
 
-                      await api.put(
+                      const token =
+  localStorage.getItem(
+    "token"
+  );
 
-                        `/admin/payments/${payment.id}`,
+await api.put(
 
-                        {
-                          status: "rejected"
-                        }
+  `/admin/payments/${payment.id}`,
 
-                      );
+  {
+    status: "rejected"
+  },
+
+  {
+    headers: {
+      Authorization:
+        `Bearer ${token}`
+    }
+  }
+
+);
 
                       fetchPayments();
 
