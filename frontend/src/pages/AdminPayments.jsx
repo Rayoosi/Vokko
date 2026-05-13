@@ -22,20 +22,20 @@ function AdminPayments() {
       try {
 
         const token =
-  localStorage.getItem(
-    "token"
-  );
+          localStorage.getItem(
+            "token"
+          );
 
-const res =
-  await api.get(
-    "/admin/payments",
-    {
-      headers: {
-        Authorization:
-          `Bearer ${token}`
-      }
-    }
-  );
+        const res =
+          await api.get(
+            "/admin/payments",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
 
         setPayments(
           res.data
@@ -116,33 +116,41 @@ const res =
 
               <div className="flex gap-3">
 
+                {/* APPROVE */}
+
                 <button
+
+                  disabled={
+                    payment.status !==
+                    "pending"
+                  }
 
                   onClick={async () => {
 
                     try {
 
                       const token =
-  localStorage.getItem(
-    "token"
-  );
+                        localStorage.getItem(
+                          "token"
+                        );
 
-await api.put(
+                      await api.put(
 
-  `/admin/payments/${payment.id}`,
+                        `/admin/payments/${payment.id}`,
 
-  {
-    status: "approved"
-  },
+                        {
+                          status:
+                            "approved"
+                        },
 
-  {
-    headers: {
-      Authorization:
-        `Bearer ${token}`
-    }
-  }
+                        {
+                          headers: {
+                            Authorization:
+                              `Bearer ${token}`
+                          }
+                        }
 
-);
+                      );
 
                       fetchPayments();
 
@@ -154,7 +162,12 @@ await api.put(
 
                   }}
 
-                  className="bg-green-500/20 hover:bg-green-500/30 text-green-400 px-4 py-2 rounded-2xl font-bold transition"
+                  className={`px-4 py-2 rounded-2xl font-bold transition ${
+                    payment.status ===
+                    "pending"
+                      ? "bg-green-500/20 hover:bg-green-500/30 text-green-400"
+                      : "bg-gray-500/20 text-gray-500 cursor-not-allowed"
+                  }`}
 
                 >
 
@@ -162,33 +175,41 @@ await api.put(
 
                 </button>
 
+                {/* REJECT */}
+
                 <button
+
+                  disabled={
+                    payment.status !==
+                    "pending"
+                  }
 
                   onClick={async () => {
 
                     try {
 
                       const token =
-  localStorage.getItem(
-    "token"
-  );
+                        localStorage.getItem(
+                          "token"
+                        );
 
-await api.put(
+                      await api.put(
 
-  `/admin/payments/${payment.id}`,
+                        `/admin/payments/${payment.id}`,
 
-  {
-    status: "rejected"
-  },
+                        {
+                          status:
+                            "rejected"
+                        },
 
-  {
-    headers: {
-      Authorization:
-        `Bearer ${token}`
-    }
-  }
+                        {
+                          headers: {
+                            Authorization:
+                              `Bearer ${token}`
+                          }
+                        }
 
-);
+                      );
 
                       fetchPayments();
 
@@ -200,7 +221,12 @@ await api.put(
 
                   }}
 
-                  className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-2xl font-bold transition"
+                  className={`px-4 py-2 rounded-2xl font-bold transition ${
+                    payment.status ===
+                    "pending"
+                      ? "bg-red-500/20 hover:bg-red-500/30 text-red-400"
+                      : "bg-gray-500/20 text-gray-500 cursor-not-allowed"
+                  }`}
 
                 >
 
