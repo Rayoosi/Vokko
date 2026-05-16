@@ -48,10 +48,10 @@ router.get(
 
       const vipRewards = {
 
-        VIP1: 4,
-        VIP2: 10,
-        VIP3: 22,
-        VIP4: 50
+        VIP 1: 4,
+        VIP 2: 10,
+        VIP 3: 22,
+        VIP 4: 50
 
       };
 
