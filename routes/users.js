@@ -66,10 +66,12 @@ router.get(
         const lastReward =
           user.last_reward || 0;
 
-        const passedDays =
-          Math.floor(
-            (now - lastReward) / DAY
-          );
+        const passedDays = Math.min(
+  Math.floor(
+    (now - lastReward) / DAY
+  ),
+  30
+);
 
         if (
           passedDays > 0
