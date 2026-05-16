@@ -43,62 +43,58 @@ router.get(
       const user =
         result.rows[0];
 
-      const DAY =
-        1000 * 60 * 60 * 24;
+      console.log("PLAN:", user.plan);
 
       const vipRewards = {
 
-        VIP 1: 4,
-        VIP 2: 10,
-        VIP 3: 22,
-        VIP 4: 50
+        "VIP 1": 4,
+        "VIP 2": 10,
+        "VIP 3": 22,
+        "VIP 4": 50
 
       };
 
+      console.log(
+        "REWARD:",
+        vipRewards[user.plan]
+      );
+
       const now =
         Date.now();
+
+      const passedDays = 1;
 
       if (
         user.plan &&
         vipRewards[user.plan]
       ) {
 
-        const lastReward =
-          user.last_reward || 0;
+        const reward =
+          vipRewards[user.plan];
 
-        const passedDays =
-          Math.floor(
-            (now - lastReward) / DAY
-          );
+        console.log(
+          "ADDING:",
+          reward
+        );
 
-        if (
-          passedDays > 0
-        ) {
+        await db.query(
+          `
+          UPDATE users
+          SET
+            points = points + $1,
+            last_reward = $2
+          WHERE id = $3
+          `,
+          [
+            reward,
+            now,
+            user.id
+          ]
+        );
 
-          const reward =
-            vipRewards[user.plan] *
-            passedDays;
+        user.points += reward;
 
-          await db.query(
-            `
-            UPDATE users
-            SET
-              points = points + $1,
-              last_reward = $2
-            WHERE id = $3
-            `,
-            [
-              reward,
-              now,
-              user.id
-            ]
-          );
-
-          user.points += reward;
-
-          user.last_reward = now;
-
-        }
+        user.last_reward = now;
 
       }
 
