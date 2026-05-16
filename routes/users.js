@@ -22,7 +22,8 @@ router.get(
             role,
             plan,
             streak,
-            referral_code
+            referral_code,
+            last_reward
           FROM users
           WHERE id = $1
           `,
@@ -39,13 +40,74 @@ router.get(
 
       }
 
+      const user =
+        result.rows[0];
+
+      const DAY =
+        1000 * 60 * 60 * 24;
+
+      const vipRewards = {
+
+        VIP1: 4,
+        VIP2: 10,
+        VIP3: 22,
+        VIP4: 50
+
+      };
+
+      const now =
+        Date.now();
+
+      if (
+        user.plan &&
+        vipRewards[user.plan]
+      ) {
+
+        const lastReward =
+          user.last_reward || 0;
+
+        const passedDays =
+          Math.floor(
+            (now - lastReward) / DAY
+          );
+
+        if (
+          passedDays > 0
+        ) {
+
+          const reward =
+            vipRewards[user.plan] *
+            passedDays;
+
+          await db.query(
+            `
+            UPDATE users
+            SET
+              points = points + $1,
+              last_reward = $2
+            WHERE id = $3
+            `,
+            [
+              reward,
+              now,
+              user.id
+            ]
+          );
+
+          user.points += reward;
+
+          user.last_reward = now;
+
+        }
+
+      }
+
       res.json({
 
-        user:
-          result.rows[0],
+        user,
 
         points:
-          result.rows[0].points
+          user.points
 
       });
 
