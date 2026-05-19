@@ -34,8 +34,8 @@ function ProfilePage({
           localStorage.getItem("token");
 
         const res =
-          await api.get(
-            "/users/profile",
+  await api.get(
+    "/users/me",
             {
               headers: {
                 Authorization:
