@@ -33,27 +33,27 @@ export default function LandingPage({
   /* ---------------- VIP DATA ---------------- */
 
   const vipPlans = [
-    {
-      name: "VIP 1",
-      price: "$7",
-      reward: "1 point/day"
-    },
-    {
-      name: "VIP 2",
-      price: "$15",
-      reward: "2.5 points/day"
-    },
-    {
-      name: "VIP 3",
-      price: "$30",
-      reward: "4.9 points/day"
-    },
-    {
-      name: "VIP 4",
-      price: "$50",
-      reward: "8.2 points/day"
-    }
-  ];
+  {
+    name: "VIP 1",
+    price: "$30",
+    reward: "4 Point / Day"
+  },
+  {
+    name: "VIP 2",
+    price: "$75",
+    reward: "10 Points / Day"
+  },
+  {
+    name: "VIP 3",
+    price: "$150",
+    reward: "22 Points / Day"
+  },
+  {
+    name: "VIP 4",
+    price: "$300",
+    reward: "50 Points / Day"
+  }
+];
 
   return (
 
