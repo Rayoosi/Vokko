@@ -12,6 +12,15 @@ function ProfilePage({
   const [profile, setProfile] =
     useState(null);
 
+  const [username, setUsername] =
+    useState("");
+
+  const [walletAddress, setWalletAddress] =
+    useState("");
+
+  const [profilePicture, setProfilePicture] =
+    useState("");
+
   /* ---------------- LOAD PROFILE ---------------- */
 
   useEffect(() => {
@@ -36,6 +45,18 @@ function ProfilePage({
           );
 
         setProfile(res.data);
+
+        setUsername(
+          res.data.user.username || ""
+        );
+
+        setWalletAddress(
+          res.data.user.wallet_address || ""
+        );
+
+        setProfilePicture(
+          res.data.user.profile_picture || ""
+        );
 
       } catch (err) {
 
@@ -235,6 +256,173 @@ function ProfilePage({
           Copy Referral Link 🚀
 
         </button>
+
+      </div>
+
+      {/* PROFILE SETTINGS */}
+
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 mt-8">
+
+        <h2 className="text-3xl font-black">
+
+          Profile Settings ⚙️
+
+        </h2>
+
+        <p className="text-slate-400 mt-3 text-lg">
+
+          Update your account information.
+
+        </p>
+
+        {/* PROFILE IMAGE */}
+
+        <div className="flex justify-center mt-10">
+
+          <img
+            src={
+              profilePicture ||
+              "https://i.pravatar.cc/150"
+            }
+            alt=""
+            className="w-32 h-32 rounded-full object-cover border-4 border-cyan-400"
+          />
+
+        </div>
+
+        <div className="space-y-6 mt-10">
+
+          {/* USERNAME */}
+
+          <div>
+
+            <p className="text-slate-400 text-sm mb-2">
+
+              Username
+
+            </p>
+
+            <input
+              type="text"
+              value={username}
+              onChange={(e) =>
+                setUsername(
+                  e.target.value
+                )
+              }
+              className="w-full bg-black/30 border border-white/10 rounded-2xl p-4 outline-none"
+            />
+
+          </div>
+
+          {/* WALLET */}
+
+          <div>
+
+            <p className="text-slate-400 text-sm mb-2">
+
+              Wallet Address
+
+            </p>
+
+            <input
+              type="text"
+              value={walletAddress}
+              onChange={(e) =>
+                setWalletAddress(
+                  e.target.value
+                )
+              }
+              className="w-full bg-black/30 border border-white/10 rounded-2xl p-4 outline-none"
+            />
+
+          </div>
+
+          {/* PROFILE IMAGE */}
+
+          <div>
+
+            <p className="text-slate-400 text-sm mb-2">
+
+              Profile Image URL
+
+            </p>
+
+            <input
+              type="text"
+              value={profilePicture}
+              onChange={(e) =>
+                setProfilePicture(
+                  e.target.value
+                )
+              }
+              className="w-full bg-black/30 border border-white/10 rounded-2xl p-4 outline-none"
+            />
+
+          </div>
+
+          {/* SAVE BUTTON */}
+
+          <button
+            onClick={async () => {
+
+              try {
+
+                const token =
+                  localStorage.getItem(
+                    "token"
+                  );
+
+                await api.put(
+                  "/users/update-profile",
+                  {
+                    username,
+                    walletAddress,
+                    profilePicture
+                  },
+                  {
+                    headers: {
+                      Authorization:
+                        `Bearer ${token}`
+                    }
+                  }
+                );
+
+                setProfile({
+                  ...profile,
+                  user: {
+                    ...profile.user,
+                    username,
+                    wallet_address:
+                      walletAddress,
+                    profile_picture:
+                      profilePicture
+                  }
+                });
+
+                toast.success(
+                  "Profile updated 🚀"
+                );
+
+              } catch (err) {
+
+                console.log(err);
+
+                toast.error(
+                  "Update failed"
+                );
+
+              }
+
+            }}
+            className="w-full bg-gradient-to-r from-cyan-400 to-purple-500 hover:scale-105 transition duration-300 text-white font-bold py-4 rounded-2xl text-lg shadow-2xl"
+          >
+
+            Save Profile 🚀
+
+          </button>
+
+        </div>
 
       </div>
 
