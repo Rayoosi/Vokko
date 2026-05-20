@@ -23,8 +23,14 @@ router.get("/daily", auth, async (req, res) => {
 
       await db.query(
         `
-        INSERT INTO daily_missions(user_id)
-        VALUES($1)
+        INSERT INTO daily_missions
+        (
+          user_id,
+          mission_date,
+          ads_watched,
+          completed
+        )
+        VALUES($1, CURRENT_DATE, 0, false)
         `,
         [req.user.id]
       );
@@ -81,7 +87,11 @@ router.post("/watch-ad", auth, async (req, res) => {
     const currentMission =
       mission.rows[0];
 
-    if (currentMission.completed) {
+    /* ---------------- ALREADY COMPLETED ---------------- */
+
+    if (
+      currentMission.ads_watched >= 7
+    ) {
 
       return res.status(400).json({
         message:
@@ -96,11 +106,15 @@ router.post("/watch-ad", auth, async (req, res) => {
 
     let reward = 0;
 
-    if (newCount >= 7) {
+    /* ---------------- FINAL REWARD ---------------- */
+
+    if (newCount === 7) {
 
       completed = true;
 
       reward = 3;
+
+      /* ADD USER POINTS */
 
       await db.query(
         `
@@ -113,6 +127,8 @@ router.post("/watch-ad", auth, async (req, res) => {
           req.user.id
         ]
       );
+
+      /* SAVE TRANSACTION */
 
       await db.query(
         `
@@ -131,6 +147,8 @@ router.post("/watch-ad", auth, async (req, res) => {
         ]
       );
     }
+
+    /* UPDATE MISSION */
 
     await db.query(
       `
