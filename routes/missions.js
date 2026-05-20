@@ -112,7 +112,7 @@ router.post("/watch-ad", auth, async (req, res) => {
 
       completed = true;
 
-      reward = 3;
+      reward = 0.5;
 
       /* ADD USER POINTS */
 
